@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" href="img/logo.png" type="image/png">
+      <title>Bin Harris</title>
+      <!-- Bootstrap Css -->
+      <link rel="stylesheet" href="{% static 'vender/bootstrap/css/bootstrap.min.css' %}">
+      <!-- Icofont -->
+      <link rel="stylesheet" href="{% static 'vender/icofont/icofont.min.css' %}">
+      <!-- Slick SLider Css -->
+      <link rel="stylesheet" href="{% static 'vender/slick/slick/slick.css' %}">
+      <link rel="stylesheet" href="{% static 'vender/slick/slick/slick-theme.css' %}">
+      <!-- Sidebar css -->
+      <link rel="stylesheet" href="{% static 'vender/sidebar/demo.css' %}">
+      <!-- Custom Css -->
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+   </head>
+   <body class="bg-light">
+      {% csrf_token %}
+      <div class="product-details d-flex flex-column vh-100">
+         <!-- navbar -->
+         <div class="d-flex align-items-center gap-3 p-3 bg-primary">
+            <a id="goback" class="text-white"><i class="bi bi-arrow-left fs-5"></i></a>
+            <div>
+               <h6 class="fw-bold text-white mb-0">{{product_data.brand}}</h6>
+               <p class="text-white-50 small m-0">BHT</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 ms-auto">
+              
+               <a class="toggle hc-nav-trigger hc-nav-1" href="#" role="button" aria-controls="hc-nav-1">
+               <b class="bg-dark bg-opacity-75 rounded-circle user-icon">
+               <i class="bi bi-list d-flex m-0 h4 text-white"></i>
+               </b>
+               </a>
+            </div>
+         </div>
+         <!-- slider -->
+         <div class="vh-100 my-auto overflow-auto">
+            <div class="bg-white shadow-sm p-3 mb-3">
+               <div class="product-slider">
+                  <div class="product-item" ">
+                     <img src="{{product_data.product_image.url}}" alt="" class="img-fluid mx-auto">
+                  </div>
+                  <div class="product-item">
+                     <img src="{{product_data.product_image.url}}" alt="" class="img-fluid mx-auto">
+                  </div>
+                  <div class="product-item">
+                     <img src="{{product_data.product_image.url}}" alt="" class="img-fluid mx-auto">
+                  </div>
+               </div>
+               <!-- detail -->
+               <div class="pt-4">
+                  <p class="text-primary mb-1">{{product_data.brand}}</p>
+                  <h5 class="fw-bold text-black lh-base">{{product_data.Product_name}}
+                  </h5>
+               </div>
+               <div class="d-flex align-items-center justify-content-between">
+                  <div class="mb-0">
+                     <p class="text-muted mb-1">{{product_data.Min_value}} {{product_data.Unit_type}}</p>
+                     <h6 class="mb-0">OMR {{product_data.Price}} <small>(Inclusive of all taxes)</small></h6>
+                  </div>
+                  
+                  <div>
+                  </div>
+                  <div  class="osahan-count d-flex align-items-center justify-content-between border border-dark-subtle rounded-pill h6 m-0 p-1">
+                     <span class="text-muted pminus d-flex"><i style="font-size: 20px;" class="icofont-minus-circle"></i></span>
+                     <input type="text"  id="quandity" class="lh-sm small text-black text-center box border-0" disabled data-url="{% url 'customer:addtocart' %}" ppid="{{product_data.id}}" value="{{quandity.quantity}}">
+                     <span id="minusurls" data-url="{% url 'customer:removecart' %}" class="text-muted pplus d-flex"><i style="font-size: 20px;" class="icofont-plus-circle"></i></span>
+                 </div>
+               </div>
+               
+            </div>
+            
+            <!-- important information -->
+            <div class="bg-white shadow-sm p-3">
+               <h6 class="fw-bold mb-2">Important Information</h6>
+               <p class="text-muted m-0">{{product_data.Description}}
+               </p>
+            </div>
+         </div>
+         <div class="mt-auto bg-white p-3" id="none">
+            <button id="addtocart" class="btn btn-success w-100 text-uppercase btn-lg fw-bold">ADD TO CART</button>
+         </div>
+         <div class="mt-auto bg-white p-3" id="block" style="display: none;">
+            <a href="{% url 'customer:mycart' %}" class="btn btn-success w-100 text-uppercase btn-lg fw-bold">VIEW CART</a>
+         </div>
+      </div>
+      <!-- sidebar nav -->
+     <!-- sidebar nav -->
+   <nav id="main-nav">
+      <ul class="second-nav">
+         <li class="osahan-user-profile bg-primary">
+            <div class="d-flex align-items-center gap-2">
+               <img src="{% static 'images/bht.png' %}" alt="" class="rounded-pill img-fluid">
+               <div class="ps-1">
+                  <h5 class="fw-bold text-white osahan-mb-1">BHT Super Market</h5>
+                  <p class="text-white-50 m-0">{{supermarket}}</p>
+               </div>
+            </div>
+         </li>
+         <li><a href="{% url 'customer:home' %}"><i class="bi bi-house me-3"></i>Homepage</a></li>
+         <li><a href="{% url 'customer:products' %}"><i class="bi bi-grid me-3"></i>Products</a></li>
+         <li><a href="{% url 'customer:mycart' %}"><i class="bi bi-basket me-3"></i>Cart</a></li>
+         <li><a href="{% url 'customer:orders' %}"><i class="bi bi-receipt me-3"></i>Orders</a></li>
+        
+      </ul>
+      
+   </nav>
+      <!-- Bootstrap Bundle Js -->
+      <script src="{% static 'vender/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <!-- Jquery -->
+      <script src="{% static 'vender/jquery/jquery.min.js' %}"></script>
+      <!-- Slick Slider Js -->
+      <script src="{% static 'vender/slick/slick/slick.min.js' %}"></script>
+      <!-- Sidebar js -->
+      <script src="{% static 'vender/sidebar/hc-offcanvas-nav.js' %}"></script>
+      <!-- Custom Js -->
+      <script src="{% static 'js/custom2.js' %}"></script>
+      <script src="{% static 'js/myjs.js' %}"></script>
+   </body>
+</html>

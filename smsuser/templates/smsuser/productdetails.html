@@ -1,0 +1,275 @@
+{% extends 'smsuser/index.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head %}
+{% endblock %}
+
+{% block nav %}
+<div class="navbar-nav w-100">
+    <a href="{% url 'smsuser:home' %}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+    <div class="nav-item dropdown">
+        <a href="{% url 'smsuser:productslist' %}" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Products</a>
+        <!-- <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">Categories</a>
+                            <a href="typography.html" class="dropdown-item">Typography</a>
+                            <a href="element.html" class="dropdown-item">Other Elements</a>
+                        </div> -->
+    </div>
+    <a href="{% url 'smsuser:categories' %}" class="nav-item nav-link"><i class="fa fa-archive me-2"></i>Categories</a>
+    <a href="{% url 'smsuser:orders' %}" class="nav-item nav-link "><i
+            class="fa fa-shopping-cart me-2"></i>Orders</a>
+    <a href="{% url 'smsuser:coupons' %}" class="nav-item nav-link "><i class="fa fa-clipboard me-2"></i>Coupons</a>
+    <a href="{% url 'smsuser:addbanner' %}" class="nav-item nav-link"><i class="fa fa-comments me-2"></i>Feedback</a>
+    <div class="nav-item dropdown">
+        <a href="{% url 'smsuser:report' %}" class="nav-item nav-link"><i class="fa fa-bug me-2"></i></i>Report
+            Issues</a>
+        <!-- <div class="dropdown-menu bg-transparent border-0">
+                            <a href="signin.html" class="dropdown-item">Sign In</a>
+                            <a href="signup.html" class="dropdown-item">Sign Up</a>
+                            <a href="404.html" class="dropdown-item">404 Error</a>
+                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                        </div> -->
+    </div>
+    <a href="{% url 'smsuser:logout' %}" class="nav-item nav-link"><i class="fas fa-sign-in-alt me-2"></i>Logout</a>
+
+</div>
+{% endblock %}
+
+{% block home %}
+
+
+<style>
+    .ordercard {
+        background-color: white;
+        padding: 2%;
+        width: 100%;
+        border-radius: 13px;
+    }
+</style>
+
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Product Details</h6>
+           
+
+           
+      \
+        </div>
+        <style>
+            .cname{
+                font-weight: 900;
+            }
+            .cdet{
+                font-weight: 900;
+                opacity: .7;
+            }
+        </style>
+
+        <img src="{{product.product_image.url}}" width="150px" height="150px" alt="" srcset="">
+        <h6 class="pb-3 pt-2">{{product.Product_ID}}</h6>
+        <div class="ordercard">
+            <div class="row border-bottom align-items-center">
+
+                <p class="col-6 orderdet p-2 cdet">
+                    Product Name
+                </p>
+                <p class=" col-6 orderdet p-2 cname">
+                    {{product.Product_name}}
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet" >
+                    Brand
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{product.brand}}
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Stock Status
+                </p>
+                <p class="col-6 orderdet cname p-2 {% if product.onstock %} text-success  {% else %} text-danger {% endif %}">
+                    {% if product.onstock %}
+                    In Stock
+                    {% else %}
+                    Out of Stock
+                    {% endif %}
+
+                   
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Price
+                </p>
+                <p class="col-6 orderdet cname p-2 ">
+                    {{product.Price}} 
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Catagory
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{product.Product_category.category_name}}
+                </p>
+            </div>
+
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Description
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{product.Description}}
+                    
+                </p>
+            </div> <br>
+            <div>
+                <a class="btn btn-sm btn-primary" href="{% url 'smsuser:editproduct' product.id %}">Edit</a>
+                <a class="btn btn-sm btn-danger" href="{% url 'smsuser:deleteproduct' product.id %}">Delete</a>
+                {% if product.onstock %}
+                <a class="btn btn-sm btn-success" href="{% url 'smsuser:outofstock' product.id %}">In Stock</a>
+                {% else %}
+                <a class="btn btn-sm btn-danger" href="{% url 'smsuser:instock' product.id %}">Out Of stock</a>
+                {% endif %}
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+</div>
+<!-- Recent Sales End -->
+
+
+<!-- Widgets Start -->
+<!-- <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h6 class="mb-0">Messages</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center pt-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Calender</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div id="calender"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">To Do List</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div class="d-flex mb-2">
+                                <input class="form-control bg-transparent" type="text" placeholder="Enter task">
+                                <button type="button" class="btn btn-primary ms-2">Add</button>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox" checked>
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span><del>Short task goes here...</del></span>
+                                        <button class="btn btn-sm text-primary"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center pt-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+<!-- Widgets End -->
+
+{% endblock %}
+{% block bodyened %}
+      
+{% endblock %}

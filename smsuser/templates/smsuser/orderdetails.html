@@ -1,0 +1,391 @@
+{% extends 'smsuser/index.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head %}
+{% endblock %}
+
+{% block nav %}
+<div class="navbar-nav w-100">
+    <a href="{% url 'smsuser:home' %}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+    <div class="nav-item dropdown">
+        <a href="{% url 'smsuser:productslist' %}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Products</a>
+        <!-- <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">Categories</a>
+                            <a href="typography.html" class="dropdown-item">Typography</a>
+                            <a href="element.html" class="dropdown-item">Other Elements</a>
+                        </div> -->
+    </div>
+    <a href="{% url 'smsuser:categories' %}" class="nav-item nav-link"><i class="fa fa-archive me-2"></i>Categories</a>
+    <a href="{% url 'smsuser:orders' %}" class="nav-item nav-link active"><i
+            class="fa fa-shopping-cart me-2"></i>Orders</a>
+    <a href="{% url 'smsuser:coupons' %}" class="nav-item nav-link "><i class="fa fa-clipboard me-2"></i>Coupons</a>
+    <a href="{% url 'smsuser:addbanner' %}" class="nav-item nav-link"><i class="fa fa-comments me-2"></i>Feedback</a>
+    <div class="nav-item dropdown">
+        <a href="{% url 'smsuser:report' %}" class="nav-item nav-link"><i class="fa fa-bug me-2"></i></i>Report
+            Issues</a>
+        <!-- <div class="dropdown-menu bg-transparent border-0">
+                            <a href="signin.html" class="dropdown-item">Sign In</a>
+                            <a href="signup.html" class="dropdown-item">Sign Up</a>
+                            <a href="404.html" class="dropdown-item">404 Error</a>
+                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                        </div> -->
+    </div>
+    <a href="{% url 'smsuser:logout' %}" class="nav-item nav-link"><i class="fas fa-sign-in-alt me-2"></i>Logout</a>
+
+</div>
+{% endblock %}
+
+{% block home %}
+
+
+<style>
+    .ordercard {
+        background-color: white;
+        padding: 2%;
+        width: 100%;
+        border-radius: 13px;
+    }
+</style>
+
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">{{order.OrderId}}</h6>
+            {% if order.status == 'Accepted' %}
+            <div>
+               
+            </div>
+            {% elif order.status == 'Rejected' %}
+
+            <div>
+                <a class="btn btn-sm btn-success" href="{% url 'smsuser:orderaccept' order.OrderId %}">Accept</a>
+            </div>
+            {% else %}
+
+            <div>
+                <a class="btn btn-sm btn-success" href="{% url 'smsuser:orderaccept' order.OrderId %}">Accept</a>
+                <a class="btn btn-sm btn-danger" href="{% url 'smsuser:orderreject' order.OrderId %}">Reject</a>
+            </div>
+            {% endif %}
+        </div>
+        <style>
+            .cname{
+                font-weight: 900;
+            }
+            .cdet{
+                font-weight: 900;
+                opacity: .7;
+            }
+        </style>
+
+        
+        <h6 class="pb-3">ORDER DETAILS</h6>
+        <div class="ordercard">
+            <div class="row border-bottom align-items-center">
+
+                <p class="col-6 orderdet p-2 cdet">
+                    Customer
+                </p>
+                <p class=" col-6 orderdet p-2 cname">
+                    {{order.user.customer_name}}
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet" >
+                    Order Date
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{order.created_at}} 
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Delivery
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{order.time_slot}} 
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Status
+                </p>
+                <p class="col-6 orderdet cname p-2 {% if order.status == 'pending' %} text-warning {% elif order.status == 'Accepted' %} text-success {% else %} text-danger {% endif %}">
+                    {{order.status}} 
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    BHT Appartment
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {% if order.user.BHT_Appartment %}
+                    Yes
+                    {% else %}
+                    No
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Billing Address
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {% if order.user.BHT_Appartment %}
+                    {{order.user.House}} , <br> {{order.user.City}},Oman
+                    {% else %}
+                    {{order.user.House}} , <br> {{order.user.Street}},{{order.user.City}},{{order.user.District}} <br>
+                    {{order.user.Province}}, {{order.user.Postalcode}}, Oman
+                    {% endif %}
+                    
+                </p>
+            </div>
+
+
+
+        </div>
+
+        <h6 class="p-3">ORDER ITEMS</h6>
+        <div class="ordercard">
+            <div class="row border-bottom align-items-center">
+
+                <div class="col-1 orderdet p-2">
+                    Sl No
+                </div>
+                <div class=" col-1 orderdet p-2">
+
+                 </div>
+                <div class=" col-2 orderdet p-2">
+                   Product
+                </div>
+                <div class="col-2 orderdet p-2">
+                    Product ID
+                </div>
+                <div class=" col-2 orderdet p-2">
+                    Quanity
+                </div>
+                <div class="col-2 orderdet p-2">
+                    Unit Price
+                </div>
+                <div class=" col-2 orderdet p-2">
+                   Total
+                </div>
+            </div>
+            {% for item in orderdetails %}
+            <div class="row border-bottom align-items-center">
+
+                <div class="col-1 orderdet p-2">
+                    {{forloop.counter}}
+                </div>
+                <div class=" col-1 orderdet p-2">
+                    <img src="{{item.product.product_image.url}}" width="50px" height="50px" align="left" alt="">
+                  
+                </div>
+                <div class=" col-2 orderdet p-2">
+                   <span>{{item.product.Product_name}} {{item.product.brand}} {{item.product.Min_value}} {{item.product.Unit_type}}</span> 
+                </div>
+                <div class="col-2 orderdet p-2">
+                    {{item.product.Product_ID}}
+                </div>
+                <div class=" col-2 orderdet p-2">
+                    {{item.quantity}}
+                </div>
+                <div class="col-2 orderdet p-2">
+                    OMR {{item.product.final_total}} <br>
+                    <del style="font-size: 12px;"> OMR {{item.product.Price}}</del>
+                </div>
+                <div class=" col-2 orderdet p-2">
+                    OMR {{ item.product.final_total|mul:item.quantity }}
+                    <br>
+                    <del style="font-size: 12px;"> OMR {{item.product.Price|mul:item.quantity}}</del>
+                    
+                </div>
+            </div>
+            {% endfor %}
+            <div class="row border-bottom align-items-center">
+
+                <div class="col-8 orderdet p-2">
+                    
+                </div>
+                <div class="col-2 orderdet p-2 cname">
+                  Sub Total
+                </div>
+                <div class=" col-2 orderdet p-2 cname">
+                   {{total}}
+                </div>
+            </div>
+            <div class="row border-bottom align-items-center">
+
+                <div class="col-8 orderdet p-2">
+                    
+                </div>
+                <div class="col-2 orderdet p-2 cname">
+                    Discount
+                  </div>
+                  <div class=" col-2 orderdet p-2  cname">
+                      OMR {{discount}}
+                  </div>
+               
+            </div>
+            <div class="row border-bottom align-items-center">
+
+                <div class="col-8 orderdet p-2">
+                    
+                </div>
+                <div class="col-2 orderdet p-2 cname">
+                    Discounted Price
+                  </div>
+                  <div class=" col-2 orderdet p-2 cname">
+                    {{ discountedprice }}
+                  </div>
+            </div>
+            
+            <div class="row border-bottom align-items-center">
+
+                <div class="col-8 orderdet p-2">
+                    
+                </div>
+                <div class="col-2 orderdet p-2 cname" style="color: black;">
+                  Grand Total
+                </div>
+                <div class=" col-2 orderdet p-2 cname" style="color: black;"">
+                   OMR {{grandtotal}}
+                </div>
+            </div>
+        <div class="table-responsive">
+
+        </div>
+    </div>
+
+</div>
+<!-- Recent Sales End -->
+
+
+<!-- Widgets Start -->
+<!-- <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h6 class="mb-0">Messages</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center pt-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Calender</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div id="calender"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">To Do List</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div class="d-flex mb-2">
+                                <input class="form-control bg-transparent" type="text" placeholder="Enter task">
+                                <button type="button" class="btn btn-primary ms-2">Add</button>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox" checked>
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span><del>Short task goes here...</del></span>
+                                        <button class="btn btn-sm text-primary"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center pt-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+<!-- Widgets End -->
+
+{% endblock %}
+{% block bodyened %}
+      
+{% endblock %}

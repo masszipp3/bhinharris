@@ -1,0 +1,228 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" href="img/logo.png" type="image/png">
+      <title>Foodmart - Food & Grocery Delivery Mobile Template</title>
+      <link rel="stylesheet" href="{% static 'vender/bootstrap/css/bootstrap.min.css' %}">
+      <!-- Icofont -->
+      <link rel="stylesheet" href="{% static 'vender/icofont/icofont.min.css' %}">
+      <!-- Sidebar css -->
+      <link rel="stylesheet" href="{% static 'vender/sidebar/demo.css' %}">
+      <!-- Custom Css -->
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+      <script src="https://code.jquery.com/jquery-3.7.0.js"
+          integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+   </head>
+   <body class="bg-light">
+      <div class="order-detail d-flex flex-column vh-100">
+         <!-- navbar -->
+         <div class="bg-white mb-auto shadow-sm border-bottom">
+            <div class="d-flex align-items-center gap-3 p-3 shadow-sm">
+               <a id="goback" class="text-primary"><i class="bi bi-arrow-left fs-5"></i></a>
+               <div>
+                  <h6 class="fw-bold mb-0">Order #{{order.OrderId}}</h6>
+                  <p class="text-muted small m-0"><span class="text-success">In Progress</span> - {{count}} items {{grandtotal}} OMR</p>
+               </div>
+               <div class="d-flex align-items-center gap-2 ms-auto">
+                  <a class="toggle" href="#">
+                  <b class="bg-dark bg-opacity-75 rounded-circle user-icon">
+                  <i class="bi bi-list d-flex m-0 h4 text-white"></i>
+                  </b>
+                  </a>
+               </div>
+            </div>
+         </div>
+         <!-- body -->
+         <div class="vh-100 my-auto overflow-auto">
+            <div class="bg-white p-3 mb-4 shadow-sm">
+               <div class="d-flex align-items-center gap-3 mb-3">
+                  <i class="icofont-building-alt icofont-2x"></i>
+                  <div class="text-truncate">
+                     <p class="mb-0">Foodmart</p>
+                     <p class="text-muted text-truncate m-0">Lower GF 1, Sandhu Tower 2, Gurudev Nagar, Ferozepur Road</p>
+                  </div>
+               </div>
+               <div class="d-flex align-items-center gap-3">
+                  <i class="icofont-ui-home icofont-2x"></i>
+                  <div class="text-truncate">
+                     <p class="mb-0">Home</p>
+                     <p class="text-muted text-truncate m-0"> {% if order.user.BHT_Appartment %} {{order.user.customer_name}},
+                        {{order.user.House}} , {{order.user.City}}, Oman
+                        {% else %}
+                        {{order.user.House}} , {{order.user.Street}},{{order.user.City}}, {{order.user.District}}
+                        {{order.user.Province}}, {{order.user.Postalcode}}, Oman
+                        {% endif %}</p>
+                  </div>
+               </div>
+            </div>
+            <div class="shadow-sm">
+               <p class="text-uppercase px-3 text-black mb-2">Details</p>
+               <div class="bg-white px-3">
+                  <div class="border-bottom py-3">
+                    {% for item in orderdetails %}
+                     <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="icofont-check-alt fs-5 text-success"></i>
+                        <p class="m-0"> {{item.quantity}} x {{item.product.Product_name}} {{item.product.brand}} {{item.product.Min_value}} {{item.product.Unit_type}}</p>
+                        <p class="ms-auto m-0">OMR {{item.product.final_total}}</p>
+                     </div>
+                     {% endfor %}
+                     
+                  </div>
+                  
+                  <div class="py-3">
+                     <div class="d-flex align-items-center justify-content-between text-muted small mb-2">
+                        <p class="m-0">Sub Total</p>
+                        <p class="m-0">OMR {{total}}</p>
+                     </div>
+                     <div class="d-flex align-items-center justify-content-between text-muted small mb-2">
+                        <p class="m-0"> Discount</p>
+                        <p class="m-0">OMR {{discount}}</p>
+                     </div>
+                     <!-- <div class="d-flex align-items-center justify-content-between text-muted small mb-2">
+                        <p class="m-0">VAT</p>
+                        <p class="m-0">OMR {{discountedprice|calculate_vat}}</p>
+                     </div> -->
+                     <div class="d-flex align-items-center justify-content-between text-muted small mb-0">
+                        <h6 class="m-0 text-black"> Grand Total</h6>
+                        <h6 class="m-0 text-primary">OMR {{grandtotal}}</h6>
+                     </div>
+                     
+                  </div>
+               </div>
+               
+            </div>
+            <p class="m-3">*NB: Order Cannot be cancelled after Confirmation</p>
+            
+         </div>
+         
+         <style>
+            
+         </style>
+        
+        
+
+         
+         {% if order.status == 'pending' %} 
+         <!-- footer -->
+         <div class="mt-auto p-3" id="cancel">
+            <button class="btn btn-primary w-100 text-uppercase btn-lg fw-bold">Cancel Order</button>
+            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#help"
+               aria-controls="help" class="btn bg-white shadow-sm border btn-light text-primary w-100 text-uppercase btn-lg fw-bold mt-3">Help</a>
+         </div>
+         <div class="mt-auto p-3" style="display: none;" id="confirm">
+            <h6 style="text-align: center;" class="mb-3">Are You Sure ..?</h6>
+            <a href="{% url 'customer:ordercancel' order.OrderId %}" class="btn btn-primary w-100 text-uppercase btn-lg fw-bold">Confirm</a>
+            <a href="#"
+               aria-controls="help" class="btn bg-white shadow-sm border btn-light text-primary w-100 text-uppercase btn-lg fw-bold mt-3">Cancel</a>
+         </div>
+         
+         {% elif order.status == 'Accepted' %}
+         <span class="stamp is-approved mb-4">Accepted</span>
+         {% else %} 
+         <span class="stamp is-nope mb-4">Cancelled</span>
+         {% endif %}
+      </div>
+      
+  </div>
+      <!-- offcanvas help -->
+      <div class="offcanvas offcanvas-end bg-light border-0" tabindex="-1" id="help" aria-labelledby="helpLabel">
+         <div class="offcanvas-header bg-primary shadow-sm d-flex align-items-center justify-content-start gap-3">
+            <a href="#" data-bs-dismiss="offcanvas" aria-label="Close"><i
+               class="bi bi-arrow-left text-white fs-5"></i></a>
+            <h6 class="offcanvas-title text-uppercase text-white fw-bold" id="helpLabel">Help & Support</h6>
+         </div>
+         <div class="offcanvas-body p-0">
+            <div class="bg-white my-3 shadow-sm">
+               <div class="accordion accordion-flush" id="accordionFlushExample">
+                  <div class="accordion-item">
+                     <h2 class="accordion-header p-3" id="flush-headingOne">
+                        <button class="accordion-button collapsed bg-white shadow-none text-dark p-0 h6 mb-0" type="button"
+                           data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
+                           aria-controls="flush-collapseOne">
+                        Where is my Order
+                        </button>
+                     </h2>
+                     <div id="flush-collapseOne" class="accordion-collapse collapse p-0"
+                        aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body p-3 pt-0">
+                           <p class="text-muted">You can track the status of your order on the order tracking
+                              page.
+                           </p>
+                           <div class="w-50">
+                              <a href="#" class="btn btn-primary w-100 py-2">Chat with us</a>
+                              <p class="text-primary text-start small pt-2 m-0">Wait time under 2 min(s)</p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="border-bottom p-3">
+                     <h6 class="m-0">I want to modify the items in my order</h6>
+                  </div>
+                  <div class="border-bottom p-3">
+                     <h6 class="m-0">I want to give delivery related instructions</h6>
+                  </div>
+                  <div class="accordion-item">
+                     <h2 class="accordion-header p-3" id="flush-headingFour">
+                        <button class="accordion-button collapsed bg-white shadow-none text-dark p-0 h6 mb-0" type="button"
+                           data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false"
+                           aria-controls="flush-collapseFour">
+                        I want to cancel my order
+                        </button>
+                     </h2>
+                     <div id="flush-collapseFour" class="accordion-collapse collapse p-0"
+                        aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body p-3 pt-0">
+                           <p class="text-muted">We recommend you to cancel your order before pickup. For more
+                              queries:
+                           </p>
+                           <div class="w-50">
+                              <a href="#" class="btn btn-primary text-uppercase w-100 py-2">Chat with us</a>
+                              <p class="text-primary text-start small pt-2 m-0">Wait time under 2 min(s)</p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="p-3">
+                     <h6 class="m-0">I have payment and refund related issues</h6>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- sidebar nav -->
+      <!-- sidebar nav -->
+   <nav id="main-nav">
+      <ul class="second-nav">
+         <li class="osahan-user-profile bg-primary">
+            <div class="d-flex align-items-center gap-2">
+               <img src="{% static 'images/bht.png' %}" alt="" class="rounded-pill img-fluid">
+               <div class="ps-1">
+                  <h5 class="fw-bold text-white osahan-mb-1">BHT Super Market</h5>
+                  <p class="text-white-50 m-0">{{supermarket}}</p>
+               </div>
+            </div>
+         </li>
+         <li><a href="{% url 'customer:home' %}"><i class="bi bi-house me-3"></i>Homepage</a></li>
+         <li><a href="{% url 'customer:products' %}"><i class="bi bi-grid me-3"></i>Products</a></li>
+         <li><a href="{% url 'customer:mycart' %}"><i class="bi bi-basket me-3"></i>Cart</a></li>
+         <li><a href="{% url 'customer:orders' %}"><i class="bi bi-receipt me-3"></i>Orders</a></li>
+        
+      </ul>
+      
+   </nav>
+         <!-- Bootstrap Bundle Js -->
+         <script src="{% static 'vender/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+         <!-- Jquery -->
+         <script src="{% static 'vender/jquery/jquery.min.js' %}"></script>
+         <!-- Sidebar js -->
+         <script src="{% static 'vender/sidebar/hc-offcanvas-nav.js' %}"></script>
+         <!-- Custom Js -->
+         <script src="{% static 'js/custom.js' %}"></script>
+         <script src="{% static 'js/myjs.js' %}"></script>
+   </body>
+</html>

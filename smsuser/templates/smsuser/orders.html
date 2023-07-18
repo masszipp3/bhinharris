@@ -1,0 +1,266 @@
+
+{% extends 'smsuser/index.html' %}
+{% load static %}
+
+
+{% block head %}
+{% endblock %}
+
+{% block nav %}
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'smsuser:home' %}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <div class="nav-item dropdown">
+                        <a href="{% url 'smsuser:productslist' %}" class="nav-item nav-link" ><i class="fa fa-th me-2"></i>Products</a>
+                        <!-- <div class="dropdown-menu bg-transparent border-0">
+                            <a href="" class="dropdown-item">Categories</a>
+                            <a href="typography.html" class="dropdown-item">Typography</a>
+                            <a href="element.html" class="dropdown-item">Other Elements</a>
+                        </div> -->
+                    </div>
+                    <a href="{% url 'smsuser:categories' %}" class="nav-item nav-link"><i class="fa fa-archive me-2"></i>Categories</a>
+                    <a href="{% url 'smsuser:orders' %}" class="nav-item nav-link active"><i class="fa fa-shopping-cart me-2"></i>Orders</a>
+                    <a href="{% url 'smsuser:coupons' %}" class="nav-item nav-link "><i class="fa fa-clipboard me-2"></i>Coupons</a>
+                    <a href="{% url 'smsuser:addbanner' %}" class="nav-item nav-link"><i class="fa fa-comments me-2"></i>Feedback</a>
+                    <div class="nav-item dropdown">
+                        <a href="{% url 'smsuser:report' %}" class="nav-item nav-link" ><i class="fa fa-bug me-2"></i></i>Report Issues</a>
+                        <!-- <div class="dropdown-menu bg-transparent border-0">
+                            <a href="signin.html" class="dropdown-item">Sign In</a>
+                            <a href="signup.html" class="dropdown-item">Sign Up</a>
+                            <a href="404.html" class="dropdown-item">404 Error</a>
+                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                        </div> -->
+                    </div>
+                    <a href="{% url 'smsuser:logout' %}" class="nav-item nav-link" ><i class="fas fa-sign-in-alt me-2"></i>Logout</a>
+
+                </div>
+                {% endblock %}
+
+                {% block search %}
+                <style>
+                    .searchresults {
+                            position: absolute;
+                            top: 100%;
+                            left: 10;
+                            width: 100%;
+                            background-color: #fff;
+                            padding: 5px;
+                            border: 1px solid #ccc;
+                            z-index: 999;
+                            width: 400px;
+                            display: block;
+                        } 
+                        .searchresults a{
+                            text-decoration: none !important;
+                            color: #082236;
+                        }  
+                        .searchresult{
+                           
+                            display: flex;
+                            justify-content: space-between; 
+                            padding: 2%;  
+                        }
+                        .searchresult:hover{
+                            background-color:#009cff;
+                            color: white;
+                        }
+                </style>
+<form class="d-none d-md-flex ms-4" id="myorderform" style="width: 400px;" data-url="{% url 'smsuser:orders' %}">
+    {% csrf_token %}
+    <input class="form-control border-0" type="search" id="ordersearch"  placeholder="Search" data-url=""><br>
+    <div class="searchresults" id="searchdetails" style="display: none;">
+      
+    </div>
+    
+</form>
+
+{% endblock %}
+
+
+{% block home %}
+
+
+
+
+            <!-- Recent Sales Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Orders</h6>
+                       
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                                <tr class="text-dark">
+                                    <th scope="col">SL No</th>
+                                    <th scope="col">Order ID</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Customer</th>
+                                    <th scope="col">Delivery</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{order.OrderId}}</td>
+                                    <td>{{order.created_at}}</td>
+                                    <td>{{order.user.customer_name}}</td>
+                                    <td>{{order.time_slot}}</td>
+                                    <td>{{order.status}}</td>
+                                    <td>{{order.total_price}}</td>
+                                    
+                                    <td><a class="btn btn-sm btn-primary" href="{% url 'smsuser:orderdetails' order.OrderId %}">View Details</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="pagination">
+                    {% if orders.has_previous %}
+                        <a class="previous-page" href="?page={{ orders.previous_page_number }}">previous</a>
+                    {% endif %}
+                
+                    <span class="current-page">{{ orders.number }}</span>
+                
+                    {% if orders.has_next %}
+                        <a class="next-page" href="?page={{ orders.next_page_number }}">next</a>
+                    {% endif %}
+            </div>
+            <!-- Recent Sales End -->
+
+
+            <!-- Widgets Start -->
+            <!-- <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h6 class="mb-0">Messages</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center pt-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Jhon Doe</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Calender</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div id="calender"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">To Do List</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div class="d-flex mb-2">
+                                <input class="form-control bg-transparent" type="text" placeholder="Enter task">
+                                <button type="button" class="btn btn-primary ms-2">Add</button>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox" checked>
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span><del>Short task goes here...</del></span>
+                                        <button class="btn btn-sm text-primary"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center pt-2">
+                                <input class="form-check-input m-0" type="checkbox">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>Short task goes here...</span>
+                                        <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <!-- Widgets End -->
+
+
+
+{% endblock %}
+
+{% block bodyened %}
+<script src="{% static 'admin/js/myjs.js' %}"></script>
+{% endblock %}

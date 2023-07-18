@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="pagination-links">
+    {% if products.has_previous %}
+<a href="?page={{ products.previous_page_number }}">Previous</a>
+{% endif %}
+
+<span class="current-page">{{ products.number }}</span>
+
+{% if products.has_next %}
+<a href="?page={{ products.next_page_number }}">Next</a>
+{% endif %}
+</div>
+</body>
+</html>

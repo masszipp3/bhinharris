@@ -1,0 +1,540 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/logo.png" type="image/png">
+    <title>Bin Harris</title>
+    <!-- Bootstrap Css -->
+    <link rel="stylesheet" href="{% static 'vender/bootstrap/css/bootstrap.min.css' %}">
+    <!-- Icofont -->
+    <link rel="stylesheet" href="{% static 'vender/icofont/icofont.min.css' %}">
+    <!-- Sidebar css -->
+    <link rel="stylesheet" href="{% static 'vender/sidebar/demo.css' %}">
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-light">
+    <div class="cart d-flex flex-column vh-100">
+        {% csrf_token %}
+        <!-- navbar -->
+        <div class="bg-white mb-auto">
+            <div class="d-flex align-items-center gap-3 p-3 bg-primary">
+                <a id="goback" class="text-white"><i class="bi bi-arrow-left fs-5"></i></a>
+                <div>
+                    <h6 class="fw-bold text-white mb-0">Review Cart</h6>
+                    <p class="text-white-50 small m-0">BHT super Market</p>
+                </div>
+                <div class="d-flex align-items-center gap-2 ms-auto">
+                    
+                    <a class="toggle" href="#">
+                        <b class="bg-dark bg-opacity-75 rounded-circle user-icon">
+                            <i class="bi bi-list d-flex m-0 h4 text-white"></i>
+                        </b>
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="bg-success bg-opacity-25 px-3 py-2 d-flex align-items-center">
+                <p class="text-success fw-bold mb-0">
+                    $20 Savings
+                </p>
+                <p class="text-success ms-auto mb-0">
+                    <b>FREE DELIVERY</b> <small>applied on this order</small>
+                </p>
+            </div> -->
+        </div>
+        <!-- body -->
+
+        {% if cartcount != 0 %}
+        <div class="my-auto vh-100 overflow-auto p-3">
+
+            <!-- coupon -->
+            <a href="#" class="link-dark" data-bs-toggle="offcanvas" data-bs-target="#applycoupon"
+                aria-controls="applycoupon">
+                <div class="bg-white d-flex align-items-center gap-3 p-3 mb-2 shadow-sm rounded-3">
+                    <i class="icofont-sale-discount icofont-2x"></i>
+                    <div>
+                        <h6 class="fw-bold text-black osahan-mb-1" id="couponss">Apply Coupons</h6>
+                        <p class="small text-primary m-0">Save more with coupons available for you</p>
+                    </div>
+                    <div class="ms-auto"><i class="bi bi-chevron-right fs-5"></i></div>
+                </div>
+            </a>
+            <!-- review items -->
+            <div class="bg-white p-3 mb-2 shadow-sm rounded-3">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <i class="icofont-food-basket icofont-2x"></i>
+                    <div>
+                        <h6 class="fw-bold text-black osahan-mb-1">Review Items</h6>
+                        <p class="small text-muted m-0"></p>
+                    </div>
+                </div>
+                {% for carts in cart %}
+                <div class="d-flex align-items-center gap-3 justify-content-between cartitem">
+                    <img src="{{carts.product.product_image.url}}" alt=""
+                        class="img-fluid bg-light p-1 border rounded-3 cart-product">
+                    <div class="me-auto">
+                        <p class="osahan-mb-1 fw-bold">{{carts.product.Product_name}}</p>
+                        <p class="text-muted small m-0">{{carts.product.Min_value}} {{carts.product.Unit_type}}</p>
+                    </div>
+                    <div
+                        class="osahan-count d-flex align-items-center justify-content-between border border-dark-subtle rounded-pill h6 m-0 p-1">
+                        <span class="text-muted cminus d-flex"><i class="icofont-minus-circle"></i></span>
+                        <input type="text" class="lh-sm small text-black text-center box border-0"
+                            data-url="{% url 'customer:addtocart' %}" ppid="{{carts.product.id}}"
+                            value="{{carts.quantity}}">
+                        <span class="text-muted cplus d-flex" data-url="{% url 'customer:removecart' %}"><i
+                                class="icofont-plus-circle"></i></span>
+                    </div>
+                    <p class="m-0 text-primary subtotal">ر.ع {{ carts.product.final_total|mul:carts.quantity }}</p>
+                </div> <br>
+                {% endfor %}
+
+            </div>
+            <!-- order door or gate -->
+            <!-- <div class="bg-white p-3 mb-2 shadow-sm rounded-3">
+                <div class="d-flex align-items-center justify-content-between gap-3">
+                    <div>
+                        <p class="fw-bold mb-1">Leave the order at door or gate</p>
+                        <p class="text-muted small m-0">Opt for no-contact delivery & our delivery partner will leave it
+                            at
+                            your door/gate.
+                        </p>
+                    </div>
+                    <span>
+                        <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
+                        <label class="btn btn-outline-dark btn-sm d-flex p-0 btn-pill" for="btn-check-outlined"><i
+                                class="icofont-check-alt"></i></label>
+                    </span>
+                </div>
+            </div> -->
+
+            <!-- bill -->
+            <div id="bill" class="bg-white p-3 mb-2 shadow-sm rounded-3">
+                <h6 class="fw-bold text-black mb-3">Bill Details</h6>
+                <div class="border-bottom">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <p class="m-0">MRP Total</p>
+                        <p id="grandtotal" class="m-0">OMR {{total}}</p>
+                    </div>
+                    <!-- <div class="d-flex align-items-center justify-content-between mb-2">
+                        <p class="m-0">VAT (5%)</p>
+                        <p id="vat" class="m-0">OMR {{ total|calculate_vat }}</p>
+                    </div> -->
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <p class="m-0">Discount</p>
+                        <p class="m-0" id="discountt">OMR 0</p>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <p class="text-info m-0">Delivery Fee</p>
+                        <p class="m-0" style="color: green;">FREE</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between pt-3">
+                    <h6 class="text-primary m-0">Subtotal</h6>
+                    <h6 id="subtotals" class="fw-bold text-primary m-0">OMR {{total}}</h6>
+                </div>
+            </div>
+
+            <div class="mb-4">
+
+                <div class="bg-white rounded-3 shadow-sm p-3">
+                    <h6 class="fw-bold text-black mb-3">Payment Methods</h6>
+                    <div class="form-check mx-2">
+                        <input class="form-check-input fs-5 my-0" type="checkbox" checked value="cod"
+                            id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            <h6 class="fw-bold osahan-mb-1">Cash/Pay on Delivery</h6>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!-- cancellation policy -->
+            <div class="bg-white shadow-sm p-3 rounded-3">
+                <h6 class="fw-bold text-black mb-3">Cancellation policy</h6>
+                <div>
+                    <div class="d-flex align-items-center gap-3 mb-3 border bg-light p-3 rounded-3">
+                        <i class="icofont-stopwatch icofont-2x text-danger"></i>
+                        <p class="m-0">Orders cannot be cancelled and are non-refundable once packed for delivery.</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 mb-3 border bg-light p-3 rounded-3">
+                        <i class="icofont-file-alt icofont-2x text-danger"></i>
+                        <p class="m-0">In case of unexpected delays or issues, a refund will be provided.</p>
+                    </div>
+                </div>
+                <p class="mb-0 small text-muted">Check your order and address details before placing the order. <a
+                        href="#" class="text-decoration-underline text-primary">Read policy</a></p>
+            </div>
+        </div>
+        <!-- footer -->
+        <div class="mt-auto shadow-sm border-top">
+            <div class="bg-light d-flex align-items-center border-bottom justify-content-between px-3 py-2">
+                <p class="m-0" id="downtotal">Subtotal: OMR {{total}}</p>
+                <a href="#bill" class="text-primary small m-0">VIEW BILL & SAVINGS</a>
+            </div>
+            <div class="bg-white p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div data-bs-toggle="offcanvas" data-bs-target="#homelocation" aria-controls="homelocation"
+                        class="w-75">
+                        <h6 class="mb-0">Delivery to <span class="fw-bold">HOME</span></h6>
+                        <p id="deliveryadd" class="text-muted text-truncate m-0">{{customer.customer_name}},
+                            {{customer.House}}, {{customer.City}}</p>
+                    </div>
+                    <a href="#"
+                        class="btn btn-outline-success border-dark-subtle fw-bold shadow-sm user-icon rounded-pill fs-6"
+                        data-bs-toggle="offcanvas" data-bs-target="#homelocation" aria-controls="homelocation"><i
+                            class="icofont-ui-home"></i></a>
+                </div>
+                <div class="pt-3" id="addressdiv" style="display: none;">
+                    <a href="#" class="btn btn-danger w-100 text-uppercase btn-lg fw-bold" data-bs-toggle="offcanvas"
+                        data-bs-target="#homelocation" aria-controls="homelocation">Add delivery Address</a>
+                </div>
+                <div class="pt-3" id="deliverydiv" style="display: none;">
+                    <a href="#" class="btn btn-success w-100 text-uppercase btn-lg fw-bold" data-bs-toggle="offcanvas"
+                        data-bs-target="#deliveryoption" aria-controls="deliveryoption">Select delivery option</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- offcanvas location -->
+    <div class="offcanvas offcanvas-bottom border-0 h-100" tabindex="-1" id="homelocation"
+        aria-labelledby="homelocationLabel">
+        <div class="offcanvas-header bg-transparent p-0">
+            <a href="#" class="bg-primary text-white rounded-circle shadow-sm icon-sm m-3 position-absolute z-0 top-0"
+                data-bs-dismiss="offcanvas" aria-label="Close">
+                <i class="bi bi-arrow-left fs-5"></i>
+            </a>
+            <div class="ratio ratio-4x3 postion-relative z-n1">
+                <img src="{% static 'images/delivery.jpg' %}" class="border-0 w-100" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div class="d-flex align-items-center bg-light p-3 gap-3 py-3 border-top border-bottom">
+                <i class="icofont-map-pins icofont-2x text-primary"></i>
+                <div class="text-truncate">
+                    <h6 class="mb-0">Add Delivery <span class="fw-bold">Address</span></h6>
+                    <p class="text-muted text-truncate m-0">H.No. 2834 Street, 784 Sector, Ludhiana, Punjab</p>
+                </div>
+                <div class="ms-auto">
+                    <a href="#"
+                        class="btn btn-light btn-sm bg-white border text-primary fw-bold text-uppercase">Change</a>
+                </div>
+            </div>
+            <form id="myform" class="p-3" method="get" data-url="{% url 'customer:formsubmit' %}">
+                <div class="mb-3">
+                    <div class="d-flex gap-3 align-items-center justify-content-between">
+                        {% if not customer.BHT_Appartment %}
+                        <input type="radio" class="btn-check" name="bht" value="1" id="btnradio1d" autocomplete="off"
+                            >
+                        <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio1d"><i
+                                class="icofont-ui-home me-2"></i>BHT Appartment</label>
+                        <!-- <input type="radio" class="btn-check" name="btnradio" id="btnradio2d" autocomplete="off"> -->
+                        <!-- <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio2d"><i class="icofont-bag-alt me-2"></i>Other</label> -->
+                        <input type="radio" checked class="btn-check" name="bht" value="0" id="btnradio3d" autocomplete="off">
+                        <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio3d"><i
+                                class="icofont-location-pin me-2"></i>Other</label>
+                         {% else %}
+                         <input type="radio" class="btn-check" name="bht" value="1" id="btnradio1d" autocomplete="off"
+                         checked >
+                        <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio1d"><i
+                                class="icofont-ui-home me-2"></i>BHT Appartment</label>
+                        <!-- <input type="radio" class="btn-check" name="btnradio" id="btnradio2d" autocomplete="off"> -->
+                        <!-- <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio2d"><i class="icofont-bag-alt me-2"></i>Other</label> -->
+                        <input type="radio"  class="btn-check" name="bht" value="0" id="btnradio3d" autocomplete="off">
+                        <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio3d"><i
+                                class="icofont-location-pin me-2"></i>Other</label>
+                        {% endif %}        
+
+
+
+                    </div>
+                </div>
+                <div class="mb-3">
+
+                    <input type="text" id="name" name="name"
+                        value="{% if customer.customer_name != 'None' %}{{customer.customer_name}}{% endif %}"
+                        class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter Your Name">
+                </div>
+                <div class="mb-3">
+                    <input type="number" id="phone" name="phone"
+                        value="{% if customer.Mobile != 'None' %}{{customer.Mobile}}{% endif %}"
+                        class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter your Mobile">
+                </div>
+                <div class="mb-3">
+                    <input type="text" id="house" name="house"
+                        value="{% if customer.House != 'None' %}{{customer.House}}{% endif %}"
+                        class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter Building/Flat No.">
+                </div>
+                <div class="mb-3">
+                    <input type="text" id="city" value="{% if customer.City != 'None' %}{{customer.City}}{% endif %}"
+                        name="city" class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter Your City">
+                </div>
+                <div class="mb-3">
+                    <!-- <input type="text" class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter Your Street" id="street" style="display: none;"> -->
+                    <input type="text" name="address"
+                        value="{% if customer.Street != 'None' %}{{customer.Street}}{% endif %}" id="address" cols="30"
+                        rows="3" class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter Your Streetname" style="display: none;">
+                </div>
+                <div class="mb-3">
+                    <!-- <input type="text" class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter Your Street" id="street" style="display: none;"> -->
+                    <input type="text" name="province"
+                        value="{% if customer.Province != 'None' %}{{customer.Province}}{% endif %}" id="province"
+                        cols="30" rows="3"
+                        class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter Your Province" style="display: none;">
+                </div>
+                <div class="mb-3">
+                    <input type="text" id="district"
+                        value="{% if customer.District != 'None' %}{{customer.District}}{% endif %}" name="district"
+                        class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter Your district" style="display: none;">
+                </div>
+                <div class="mb-3">
+                    <input type="number" id="postalcode"
+                        value="{% if customer.Postalcode != 'None' %}{{customer.Postalcode}}{% endif %}"
+                        name="postalcode" class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Enter Your postal code" style="display: none;">
+                </div>
+
+                <div class="mb-3">
+                    <input type="text" id="Landmark"
+                        value="{% if customer.Landmark != 'None' %}{{customer.Landmark}}{% endif %}" name="landmark"
+                        class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0"
+                        placeholder="Landmark" style="display: none;">
+                </div>
+
+
+            </form>
+
+
+        </div>
+        <div class="offcanvas-footer">
+            <a href="#" id="submitbutton" class="btn btn-success text-uppercase w-100 btn-lg fw-bold"
+                data-bs-dismiss="offcanvas" aria-label="Close">Save & proceed</a>
+        </div>
+    </div>
+    <!-- offcanvas delivery option -->
+    <form method="post" id="deliverform" action="" method="post">
+        {% csrf_token %}
+        <input type="hidden">
+
+        <div class="offcanvas offcanvas-bottom bg-light border-0 h-75" tabindex="-1" id="deliveryoption"
+            aria-labelledby="deliveryoptionLabel">
+
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title fw-bold text-black" id="deliveryoptionLabel">Select a delivery option</h5>
+            </div>
+            <div class="offcanvas-body p-0">
+
+                <div class="bg-white shadow-sm p-3 border-bottom border-top" id="dnow">
+                    <div class="form-check form-check-reverse">
+                        <input class="form-check-input" type="radio" name="delivery" id="exampleRadios1" value="now"
+                            checked>
+                        <label class="form-check-label d-flex align-items-center gap-2" for="exampleRadios1">
+                            <i class="icofont-free-delivery icofont-3x text-primary"></i>
+                            <div class="text-start">
+                                <h6 class="fw-bold mb-0">Delivery now - <span class="text-success"><del
+                                            class="text-muted">$25</del> Free</span></h6>
+                                <p class="text-primary small m-0">Get in next 25 - 30 mins</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="bg-white shadow-sm p-3">
+                    <div class="form-check form-check-reverse mb-3" id="dlater">
+                        <input class="form-check-input" type="radio" name="delivery" id="exampleRadios2" value="later">
+                        <label class="form-check-label d-flex align-items-center gap-2" for="exampleRadios2">
+                            <i class="icofont-delivery-time icofont-3x text-primary"></i>
+                            <div class="text-start">
+                                <h6 class="fw-bold mb-0">Delivery later - <span class="text-success"><del
+                                            class="text-muted">$15</del> Free</span></h6>
+                                {% for choice in available %}
+                                {% if forloop.counter == 1 %}
+                                <p class="text-primary small m-0">Earliest slot: {{choice}} Today</p>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </label>
+                    </div>
+                    <div class="row row-cols-2 g-2 custom-checkbox" id="delivery" style="display: none;">
+                        {% for choice in timeslot %}
+                        {% if choice.1 in available %}
+                        <div class="col">
+                            <input type="radio" value="{{choice.0}}" class="btn-check" name="timeslot"
+                                id="btnradio{{forloop.counter}}" autocomplete="off">
+                            <label class="btn btn-outline-danger btn-sm w-100"
+                                for="btnradio{{forloop.counter}}">{{choice.1}}</label>
+                        </div>
+                        {% else %}
+                        <div class="col">
+                            <input type="radio" value="{{choice.0}}" disabled class="btn-check" name="timeslot"
+                                id="btnradio{{forloop.counter}}" autocomplete="off">
+                            <label class="btn btn-outline-danger btn-sm w-100"
+                                for="btnradio{{forloop.counter}}">{{choice.1}}</label>
+                        </div>
+                        {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+            <div class="offcanvas-footer bg-white shadow-sm border-top">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <p class="m-0">Total Order Value</p>
+                    <p id="finaltotal" class="m-0">OMR {{total}}</p>
+                </div>
+                <!-- <div class="d-flex align-items-center justify-content-between mb-1">
+                    <p class="m-0">VAT 5%</p>
+                    <p id="finalvat" class="m-0">OMR {{ total|calculate_vat }}</p>
+                </div> -->
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <p class="m-0">Amount to pay</p>
+                    <p id="finalamount" class="m-0">OMR {{total}}</p>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between">
+                    <p class="text-success m-0">Total Savings</p>
+                    <p class="m-0"><span id="finaldiscount"
+                            class="bg-success bg-opacity-25 text-success rounded small p-1">OMR {{discount}}</span></p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mt-2 mb-0">
+                    <p class="text-primary fw-bold m-0">Delivery Partner Fee</p>
+                    <p class="text-success fw-bold m-0"><del class="text-muted me-1">OMR 2</del>FREE</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mt-2 mb-3">
+                    <p class="text-dark fw-bold m-0">Mode of Payment</p>
+                    <p class="text-black fw-bold m-0">Cash On Delivery</p>
+                </div>
+                <button type="submit" class="btn btn-success text-uppercase w-100 btn-lg fw-bold">Place Order</button>
+            </div>
+        </div>
+    </form>
+    <!-- coupon offcanvas -->
+    <div class="offcanvas offcanvas-end bg-light border-0 w-100" tabindex="-1" id="applycoupon"
+        aria-labelledby="applycouponLabel">
+        <div class="offcanvas-header bg-primary d-block bg-white shadow-sm">
+            <div class="d-flex align-items-center justify-content-start gap-3">
+                <a href="#" data-bs-dismiss="offcanvas" aria-label="Close"><i
+                        class="bi bi-arrow-left text-white fs-5"></i></a>
+                <h5 class="offcanvas-title text-white fw-bold" id="applycouponLabel">Apply Coupon</h5>
+            </div>
+            <!-- search -->
+            <div class="pt-3">
+                <input type="text" class="form-control rounded-3 border-0 py-2" placeholder="Enter Coupon Code"
+                    aria-label="Enter Coupon Code" aria-describedby="search">
+            </div>
+        </div>
+        <div class="offcanvas-body bg-light">
+            <!-- Available coupons -->
+            <p class="text-black text-uppercase small mb-3" id="applycouponurl"
+                data-url="{% url 'customer:applycoupon' %}">availbale coupons</p>
+            <div class="coupons-page">
+                {% for coupons in coupon %}
+                <!-- 1st coupon -->
+                <div class="bg-white rounded-3 shadow-sm mb-3 osahan-coupons-main">
+                    <div class="d-flex align-items-start justify-content-between border-bottom p-3 position-relative">
+                        <span class="coupon-top-shape-2 position-absolute"></span>
+                        <span class="coupon-bottom-shape-2 position-absolute"></span>
+                        <div>
+                            <div
+                                class="d-flex align-items-center bg-success osahan-coupons-code mb-2 position-relative rounded-3">
+                                <i class="icofont-sale-discount text-warning fs-5 border-end p-2"></i>
+                                <span
+                                    class="d-flex align-items-center text-white fw-bold justify-content-center position-relative flex-grow-1 h-100 fs-6 px-3">
+                                    {{coupons.code}}
+                                    <span class="coupon-top-shape position-absolute"></span>
+                                    <span class="coupon-bottom-shape position-absolute"></span>
+                                </span>
+                            </div>
+                            <h6 class="m-0">Flat <span class="fw-bold">{{coupons.discount}}% off</span></h6>
+                        </div>
+                        <button class="text-primary fw-bold addcoupon" ppid=" {{coupons.code}}" id="{{coupons.id}}"
+                            data-bs-dismiss="offcanvas" aria-label="Close">APPLY</button>
+                    </div>
+                    <div class="p-3">
+                        <p class="text-muted mb-2">Use code {{coupons.code}} & get {{coupons.discount}}% off on order
+                            above OMR{{coupons.min_purchase}}
+                        </p>
+                        <a data-bs-toggle="collapse" class="text-primary" href="#collapseone" role="button"
+                            aria-expanded="false" aria-controls="collapseone">
+                            + MORE
+                        </a>
+                        <div class="collapse" id="collapseone">
+                            <div class="card card-body border-0 px-0 pb-0">
+                                <p class="text-black mb-2">Terms and Conditions</p>
+                                <ul class="d-grid gap-1 text-muted px-3 mb-0">
+                                    <li>Valid only on your first 5 orders on Foodmart</li>
+                                    <li>Minimum order value - {{coupons.min_purchase}}</li>
+                                    <li>This free delivery waiver is applicable only on delivery fee</li>
+                                    <li>Other T&Cs may apply</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="my-auto vh-100 overflow-auto p-3">
+    <div class="p-5">
+        <h6 class="text-center">Your Cart is Empty</h6>
+        <div style="display: flex; justify-content: center;">
+
+
+            <a href="{% url 'customer:products' %}" class="bg-primary border-0 p-3 m-3 text-white">Shop Now</a>
+        </div>
+    </div>
+    </div>
+    {% endif %}
+    <!-- sidebar nav -->
+    <nav id="main-nav">
+        <ul class="second-nav">
+           <li class="osahan-user-profile bg-primary">
+              <div class="d-flex align-items-center gap-2">
+                 <img src="{% static 'images/bht.png' %}" alt="" class="rounded-pill img-fluid">
+                 <div class="ps-1">
+                    <h5 class="fw-bold text-white osahan-mb-1">BHT Super Market</h5>
+                    <p class="text-white-50 m-0">{{supermarket}}</p>
+                 </div>
+              </div>
+           </li>
+           <li><a href="{% url 'customer:home' %}"><i class="bi bi-house me-3"></i>Homepage</a></li>
+           <li><a href="{% url 'customer:products' %}"><i class="bi bi-grid me-3"></i>Products</a></li>
+           <li><a href="{% url 'customer:mycart' %}"><i class="bi bi-basket me-3"></i>Cart</a></li>
+           <li><a href="{% url 'customer:orders' %}"><i class="bi bi-receipt me-3"></i>Orders</a></li>
+          
+        </ul>
+        
+     </nav>
+    <!-- Bootstrap Bundle Js -->
+    <script src="{% static 'vender/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Jquery -->
+    <script src="{% static 'vender/jquery/jquery.min.js' %}"></script>
+    <!-- Sidebar js -->
+    <script src="{% static 'vender/sidebar/hc-offcanvas-nav.js' %}"></script>
+    <!-- Custom Js -->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/myjs.js' %}"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
+</body>
+
+</html>

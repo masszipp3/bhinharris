@@ -1,0 +1,563 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="icon" href="img/logo.png" type="image/png">
+   <title>BHT Super Market - Food & Grocery Delivery</title>
+   <!-- Bootstrap Css -->
+   <link rel="stylesheet" href="{% static 'vender/bootstrap/css/bootstrap.min.css' %}">
+   <!-- Icofont -->
+   <link rel="stylesheet" href="{% static 'vender/icofont/icofont.min.css' %}">
+   <!-- Slick SLider Css -->
+   <link rel="stylesheet" href="{% static 'vender/slick/slick/slick.css' %}">
+   <link rel="stylesheet" href="{% static 'vender/slick/slick/slick-theme.css' %}">
+   <!-- Sidebar css -->
+   <link rel="stylesheet" href="{% static 'vender/sidebar/demo.css' %}">
+   <!-- Custom Css -->
+   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+   {% csrf_token %}
+   <div class="homepage d-flex flex-column vh-100">
+      <!-- navbar -->
+      <div class="homepage-navbar bg-light shadow mb-auto p-3 bg-primary">
+         <div class="d-flex align-items-center">
+            <a href="" data-bs-toggle="offcanvas"
+            data-bs-target="#homelocation" aria-controls="homelocation" class="link-dark text-truncate d-flex align-items-center gap-2" >
+               <i class="icofont-clock-time fs-2 text-white"></i>
+               <span>
+                  <h6 class="fw-bold text-white mb-0">BHT Super Market</h6>
+                  <p class="text-white-50 text-truncate d-inline-block mb-0 w-75 align-bottom">{{supermarket}}</p>
+               </span>
+            </a>
+            <div class="d-flex align-items-center gap-2 ms-auto">
+               
+               <a class="toggle" href="#">
+                  <b class="bg-dark bg-opacity-75 rounded-circle user-icon">
+                     <i class="bi bi-list d-flex m-0 h4 text-white"></i>
+                  </b>
+               </a>
+            </div>
+         </div>
+   
+         <div class="pt-3">
+            <!-- search -->
+            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#searchoffcanvas" aria-controls="searchoffcanvas">
+               <div class="input-group bg-white rounded-3 shadow-sm py-1">
+                  <input type="text" class="form-control bg-transparent border-0 rounded-0 px-3"
+                     placeholder="Search for groceries, drinks and more" aria-label="Search for atta, dal, coke and more"
+                     aria-describedby="search">
+                  <span class="input-group-text bg-transparent border-0 rounded-0 pe-3" id="search"><i
+                        class="icofont-search-1"></i></span>
+               </div>
+            </a>
+         </div>
+      </div>
+      <div class="offcanvas offcanvas-bottom border-0 h-100" tabindex="-1" id="homelocation"
+      aria-labelledby="homelocationLabel">
+      <div class="offcanvas-header bg-transparent p-0">
+         <a href="#" class="bg-primary text-white rounded-circle shadow-sm icon-sm m-3 position-absolute z-0 top-0"
+                data-bs-dismiss="offcanvas" aria-label="Close">
+                <i class="bi bi-arrow-left fs-5"></i>
+            </a>
+  
+         <div class="ratio ratio-4x3 postion-relative z-n1">
+             <img src="{% static 'images/delivery.jpg' %}" class="border-0 w-100" allowfullscreen="" loading="lazy"
+                 referrerpolicy="no-referrer-when-downgrade">
+         </div>
+     </div>
+     <div class="offcanvas-body p-0">
+         <div class="d-flex align-items-center bg-light p-3 gap-3 py-3 border-top border-bottom">
+             <i class="icofont-map-pins icofont-2x text-primary"></i>
+             <div class="text-truncate">
+                 <h6 class="mb-0">Choose a City <span class="fw-bold"></span></h6>
+                 <p class="text-muted text-truncate m-0">{{supermarket}}</p>
+             </div>
+             <div class="ms-auto">
+                
+             </div>
+         </div>
+         <form class="p-5" id="myform" method="post">
+             {% csrf_token %}
+             <div class="mb-3">
+                 <div class="d-flex gap-3 align-items-center justify-content-between">
+                     {% for sm in super %}
+                     <input name="selectsm" type="radio" value="{{ sm.id }}" class="btn-check" name="btnradio" id="btnradio{{sm.id}}d" autocomplete="off">
+                     <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio{{sm.id}}d" style="padding-top: 1rem!important; padding-bottom: 1rem!important;"><i
+                         class="icofont-location-pin me-2"></i>{{sm.address}}</label>
+                     {% endfor %}    
+                    
+ 
+                     <!-- <input type="radio" class="btn-check" name="btnradio" id="btnradio2d" autocomplete="off">
+                     <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio2d"><i class="icofont-bag-alt me-2"></i>Other</label><br>
+                     <input type="radio" class="btn-check" name="btnradio" id="btnradio3d" autocomplete="off">
+                     <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio3d" style="padding-top: 1rem!important; padding-bottom: 1rem!important;"><i
+                             class="icofont-location-pin me-2"></i>Thumrait</label>  -->
+                 </div>
+             </div>
+             
+            <!-- <button type="submit"></button> -->
+            <div class="offcanvas-footer pt-5">
+             <button type="submit" class="btn btn-success text-uppercase w-100 btn-lg fw-bold" >Save & proceed</button>
+         </div>
+         </form>
+         
+        
+         
+ 
+     </div>
+  </div>
+      <!-- body -->
+      <div class="my-auto overflow-auto vh-100">
+         <!-- shop by category -->
+         <div class="bg-light pb-3">
+            <div class="d-flex align-items-center justify-content-between p-3">
+               <h5 class="fw-bold text-black mb-0">Great deals on top picks</h5>
+               <a class="text-primary" data-bs-toggle="modal" data-bs-target="#categories" href="#">View all<i
+                     class="icofont-rounded-right"></i></a>
+            </div>
+            <div class="all-cate">
+               {% for cat in catagory %}
+               <div class="col ps-3">
+                  <a href="{% url 'customer:products' %}?catagory={{cat.slug}}" class="link-dark">
+                     <div class="card bg-transparent border-0 text-center">
+                        <img src="{{cat.category_image.url}}" alt="" class="card-img-top rounded-4 mb-2">
+                        <div class="card-body p-0">
+                           <p class="card-title small m-0">{{cat.category_name}}</p>
+                        </div>
+                     </div>
+                  </a>
+               </div>
+               {% endfor %}
+
+            </div>
+         </div>
+         <div class="p-3">
+            <!-- <a href="#" class="bg-success shadow text-white rounded-4 d-flex align-items-center px-3 py-2"> Explore <span class="bg-primary px-2 py-1 rounded-2 small text-uppercase fw-bold text-white m-2">Mega Savings</span> Store
+                  <i class="bi bi-arrow-right text-warning fs-5 ms-auto"></i>
+               </a> -->
+
+               {% for image in banners %}
+               {% if image.title == 'Top' %}
+               <a href="{% url 'customer:search' %}?query={{image.offerbrand}}">
+            <img
+               src="{{ image.image.url }}"
+               width="100%" height="100%" style="max-height: 200px;" alt="">
+            </a>
+               {% endif %}
+               {% endfor%}
+         </div>
+         <!-- Top Picks -->
+         <div class="pt-3">
+            <div class="d-flex align-items-center justify-content-between px-3 pb-3">
+               <h5 class="fw-bold text-black mb-0">Great deals on top picks</h5>
+               <a class="text-primary" href="{% url 'customer:products' %}">View all<i
+                     class="icofont-rounded-right"></i></a>
+            </div>
+            <div class="top-picks" id="productsdiv"
+            data-url="{% url 'customer:products' %}">
+               <!-- 1st item -->
+               {% for product in products %}
+               {% with quantitys=quantity|get_item:product.id %}
+               <div class="top-picks-item" >
+                  <div class="card bg-transparent border-0 p-2 h-100">
+                     {% if product.Discount == 0.0 %}
+                     <div class="bg-success position-absolute top-0 text-white osahan-badge text-center">
+                        <b>BHT</b><br>Assured
+                     </div>
+                     {% else %}
+                     <div class="bg-success position-absolute top-0 text-white osahan-badge text-center">
+                        <b>{{product.Discount|floatformat}}</b>% <br> OFF
+                     </div>
+                     {% endif %}
+
+                     <a href="{% url 'customer:product_details' product.slug %}">
+                        <img src="{{product.product_image.url}}" alt="" class="img-fluid w-75 d-block mx-auto">
+                     </a>
+                     <div class="card-body p-0 mb-3" style="height: 50px;">
+                        <small class="text-muted">{{ product.brand }}</small>
+                        <p class="card-title fw-bold mb-0">{{ product.Product_name }}</p>
+                     </div>
+                     <div class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0"
+                        id="addurl" data-url="{% url 'customer:addtocart' %}">
+                        <div class="cartdet">
+                           <p id="{{ product.id  }}" class="checkid text-muted mb-1">
+                              {{product.Min_value}}{{product.Unit_type}}</p>
+                           <del class="text-muted small"> OMR{{product.Price}}</del>
+                           <p class="fw-bold m-0"> OMR{{product.final_total}}</p>
+                        </div>
+                        <button
+                           class="btn proadd btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</button>
+                        <div style="display: none !important;"
+                           class=" productcountdiv none osahan-count d-flex align-items-center justify-content-between border border-dark-subtle rounded-pill h6 m-0 p-1">
+                           <span class="text-muted minus d-flex"><i class="icofont-minus-circle"></i></span>
+                           <input type="text" value="{{ quantitys|default:'0' }}" ppid="{{product.id}}" disabled
+                              id="productcount01" class="lh-sm small text-black text-center box border-0" value="0">
+                           <span id="minusurl" data-url="{% url 'customer:removecart' %}"
+                              class="text-muted plus d-flex"><i class="icofont-plus-circle"></i></span>
+                        </div>
+                     </div>
+
+                  </div>
+
+               </div>
+               {% endwith %}
+               {% endfor %}
+               <!-- 2nd item -->
+
+            </div>
+            <div class="p-3">
+               <!-- <a href="#" class="bg-success shadow text-white rounded-4 d-flex align-items-center px-3 py-2"> Explore <span class="bg-primary px-2 py-1 rounded-2 small text-uppercase fw-bold text-white m-2">Mega Savings</span> Store
+                     <i class="bi bi-arrow-right text-warning fs-5 ms-auto"></i>
+                  </a> -->
+                  {% for image in banners %}
+               {% if image.title == 'Mid' %}
+               <a href="{% url 'customer:search' %}?query={{image.offerbrand}}">
+               <img
+                  src="{{image.image.url}}"
+                  width="100%" height="100%" style="max-height: 200px;" alt=""></a>
+                  {% endif %}
+                  {% endfor %}
+            </div>
+         </div>
+         <!-- coupons -->
+         <div>
+            {% if coupon %}
+            <div class="bg-warning">
+               <h5 class="fw-bold text-black mb-0 p-3">Save more with coupons</h5>
+
+               <div class="coupons">
+                  
+
+                  {% for coupons in coupon %}
+                  <div class="coupons-item">
+                     <div class="link-dark pb-3 ps-3">
+                        <div class="d-flex align-items-center gap-3 shadow-sm rounded-4 p-3 bg-white">
+                           <i class="icofont-sale-discount icofont-2x text-success"></i>
+                           <div>
+                              <h6 class="fw-bold osahan-mb-1">Flat {{coupons.discount}} off</h6>
+                              <p class="small text-muted text-uppercase mb-0">Use {{coupons.code}} | on orders
+                                 above {{ coupons.min_purchase }} OMR
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  {% endfor %}
+                  
+
+               </div>
+            </div>
+            {% endif %}
+         </div>
+         <!-- must have items -->
+         <div class="py-3">
+            <h5 class="fw-bold text-black mb-0 px-3 pb-3">Must Have Items</h5>
+            <div class="top-picks">
+               <!-- 1st item -->
+               {% if most_ordered %}
+               {% for product in most_ordered %}
+               {% with quantitys=quantity|get_item:product.id %}
+               <div class="top-picks-item">
+                  <div class="card bg-transparent border-0 p-2 h-100">
+                     {% if product.Discount == 0.0 %}
+                     <div class="bg-success position-absolute top-0 text-white osahan-badge text-center">
+                        <b>BHT</b><br>Assured
+                     </div>
+                     {% else %}
+                     <div class="bg-success position-absolute top-0 text-white osahan-badge text-center">
+                        <b>{{product.Discount|floatformat}}</b>% <br> OFF
+                     </div>
+                     {% endif %}
+
+                     <a href="{% url 'customer:product_details' product.slug %}">
+                        <img src="{{product.product_image.url}}" alt="" class="img-fluid w-75 d-block mx-auto">
+                     </a>
+                     <div class="card-body p-0 mb-3" style="height: 50px;">
+                        <small class="text-muted">{{ product.brand }}</small>
+                        <p class="card-title fw-bold mb-0">{{ product.Product_name }}</p>
+                     </div>
+                     <div class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0"
+                        id="addurl" data-url="{% url 'customer:addtocart' %}">
+                        <div class="cartdet">
+                           <p id="{{ product.id  }}" class="checkid text-muted mb-1">
+                              {{product.Min_value}}{{product.Unit_type}}</p>
+                           <del class="text-muted small"> OMR{{product.Price}}</del>
+                           <p class="fw-bold m-0"> OMR{{product.final_total}}</p>
+                        </div>
+                        <button
+                           class="btn proadd btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</button>
+                        <div style="display: none !important;"
+                           class=" productcountdiv none osahan-count d-flex align-items-center justify-content-between border border-dark-subtle rounded-pill h6 m-0 p-1">
+                           <span class="text-muted minus d-flex"><i class="icofont-minus-circle"></i></span>
+                           <input type="text" value="{{ quantitys|default:'0' }}" ppid="{{product.id}}" disabled
+                              id="productcount01" class="lh-sm small text-black text-center box border-0" value="0">
+                           <span id="minusurl" data-url="{% url 'customer:removecart' %}"
+                              class="text-muted plus d-flex"><i class="icofont-plus-circle"></i></span>
+                        </div>
+                     </div>
+
+                  </div>
+
+               </div>
+               {% endwith %}
+               {% endfor %}
+               <!-- 2nd item -->
+               {% else %}
+               {% for product in most_ordered %}
+               {% with quantitys=quantity|get_item:product.id %}
+               <div class="top-picks-item">
+                  <div class="card bg-transparent border-0 p-2 h-100">
+                     {% if product.Discount == 0.0 %}
+                     <div class="bg-success position-absolute top-0 text-white osahan-badge text-center">
+                        <b>BHT</b><br>Assured
+                     </div>
+                     {% else %}
+                     <div class="bg-success position-absolute top-0 text-white osahan-badge text-center">
+                        <b>{{product.Discount|floatformat}}</b>% <br> OFF
+                     </div>
+                     {% endif %}
+
+                     <a href="{% url 'customer:product_details' product.slug %}">
+                        <img src="{{product.product_image.url}}" alt="" class="img-fluid w-75 d-block mx-auto">
+                     </a>
+                     <div class="card-body p-0 mb-3" style="height: 50px;">
+                        <small class="text-muted">{{ product.brand }}</small>
+                        <p class="card-title fw-bold mb-0">{{ product.Product_name }}</p>
+                     </div>
+                     <div class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0"
+                        id="addurl" data-url="{% url 'customer:addtocart' %}">
+                        <div class="cartdet">
+                           <p id="{{ product.id  }}" class="checkid text-muted mb-1">
+                              {{product.Min_value}}{{product.Unit_type}}</p>
+                           <del class="text-muted small"> OMR{{product.Price}}</del>
+                           <p class="fw-bold m-0"> OMR{{product.final_total}}</p>
+                        </div>
+                        <button
+                           class="btn proadd btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</button>
+                        <div style="display: none !important;"
+                           class=" productcountdiv none osahan-count d-flex align-items-center justify-content-between border border-dark-subtle rounded-pill h6 m-0 p-1">
+                           <span class="text-muted minus d-flex"><i class="icofont-minus-circle"></i></span>
+                           <input type="text" value="{{ quantitys|default:'0' }}" ppid="{{product.id}}" disabled
+                              id="productcount01" class="lh-sm small text-black text-center box border-0" value="0">
+                           <span id="minusurl" data-url="{% url 'customer:removecart' %}"
+                              class="text-muted plus d-flex"><i class="icofont-plus-circle"></i></span>
+                        </div>
+                     </div>
+
+                  </div>
+
+               </div>
+               {% endwith %}
+               {% endfor %}
+               {% endif %}
+
+            </div>
+         </div>
+         <!-- banner -->
+        
+         <div class="p-3 bg-light">
+            {% for image in banners %}
+            {% if image.title == 'Bottom' %}
+            <a href="{% url 'customer:search' %}?query={{image.offerbrand}}">
+            <img src="{{image.image.url}}" width="100%" height="100%"
+               style="max-height: 200px;" alt=""></a>
+               {% endif %}
+               {% endfor %}
+
+         </div>
+      </div>
+      <!-- category button -->
+      <div class="btn-category">
+         <a href="#" class="btn btn-primary rounded-circle shadow-sm icon-lg" data-bs-toggle="modal"
+            data-bs-target="#categories">
+            <i class="icofont-food-basket icofont-3x text-white"></i>
+         </a>
+      </div>
+      <!-- footer -->
+      <div class="footer bg-white shadow mt-auto border-top">
+         <div class="d-flex align-items-center justify-content-between py-1">
+            <a href="{% url 'customer:home' %}" class="link-dark text-center col py-2 p-1">
+               <i class="bi bi-house h3 m-0"></i>
+               <p class="small m-0 pt-1">Home</p>
+            </a>
+            <a href="{% url 'customer:products' %}" class="text-muted text-center col py-2 p-1">
+               <i class="bi bi-shop h3 m-0"></i>
+               <p class="small m-0 pt-1">Shop</p>
+            </a>
+            <a href="{% url 'customer:mycart' %}" class="text-muted text-center col py-2 p-1">
+               <i class="bi bi-basket h3 m-0"></i>
+               <p class="small m-0 pt-1">Cart</p>
+            </a>
+            <a href="{% url 'customer:orders' %}" class="text-muted text-center col py-2 p-1">
+               <i class="bi bi-geo-alt h3 m-0"></i>
+               <p class="small m-0 pt-1">Track</p>
+            </a>
+           
+         
+         </div>
+      </div>
+   </div>
+   <!-- location offcanvas -->
+   <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="location" aria-labelledby="locationLabel">
+      <div class="offcanvas-header bg-primary d-flex align-items-center justify-content-start gap-3">
+         <a href="#" data-bs-dismiss="offcanvas" aria-label="Close"><i class="bi bi-arrow-left fs-5 text-white"></i></a>
+         <h6 class="offcanvas-title text-white m-0" id="locationLabel">Enter your area or apartment name</h6>
+      </div>
+      <div class="offcanvas-body">
+         <!-- search -->
+         <div class="input-group bg-white rounded-3 border py-1">
+            <a href="#" class="input-group-text bg-transparent border-0 rounded-0 px-3" id="search"><i
+                  class="icofont-search"></i></a>
+            <input type="text" class="form-control bg-transparent border-0 rounded-0 ps-0"
+               placeholder="Try J P Nagar, Andheri West etc.." aria-label="Try J P Nagar, Andheri West etc.."
+               aria-describedby="search">
+         </div>
+         <a href="#" class="link-dark" data-bs-dismiss="offcanvas" aria-label="Close">
+            <div class="d-flex align-items-center gap-2 text-primary py-3 border-bottom">
+               <i class="icofont-location-arrow"></i>
+               <p class="m-0">Use my Current location</p>
+            </div>
+         </a>
+         <!-- Saved Address -->
+         <div class="border-bottom py-3">
+            <p class="text-black text-uppercase small">Saved Addresses</p>
+            <div class="d-flex align-items-center justify-content-between">
+               <div class="w-75">
+                  <a href="#" class="link-dark" data-bs-dismiss="offcanvas" aria-label="Close">
+                     <div class="d-flex align-items-center gap-2 osahan-mb-1">
+                        <i class="icofont-ui-home text-muted fs-6"></i>
+                        <h6 class="fw-bold mb-0">Home</h6>
+                     </div>
+                     <p class="text-muted text-truncate mb-0 ps-4">H.No. 2834 Street, 784 Sector, Ludhiana, Punjab</p>
+                  </a>
+               </div>
+               <a href="#" class="link-dark">
+                  <div class="bg-light rounded-circle icon-sm">
+                     <i class="icofont-share fs-5 text-dark-emphasis"></i>
+                  </div>
+               </a>
+            </div>
+         </div>
+         <!-- recent search -->
+         <div class="py-3">
+            <p class="text-black text-uppercase small">Recent Searches</p>
+            <a href="#" class="link-dark" data-bs-dismiss="offcanvas" aria-label="Close">
+               <div class="d-flex align-items-center gap-2 osahan-mb-1">
+                  <i class="icofont-location-pin text-muted fs-6"></i>
+                  <h6 class="fw-bold mb-0">Ludhiana</h6>
+               </div>
+               <p class="text-muted text-truncate mb-0 ps-4">87997 Street, 784 Sector, Ludhiana, Punjab</p>
+            </a>
+         </div>
+      </div>
+   </div>
+   <!-- Search Offcanvas -->
+   <div class="offcanvas offcanvas-bottom border-0 h-100" tabindex="-1"
+                                    id="searchoffcanvas" aria-labelledby="searchoffcanvasLabel">
+                                    <div class="offcanvas-header">
+                                        <div class="input-group bg-white rounded-3 border p-0">
+                                            <a href="#" class="input-group-text bg-transparent border-0 rounded-0"
+                                                id="search" data-bs-dismiss="offcanvas" aria-label="Close">
+                                                <i class="bi bi-arrow-left fs-5"></i>
+                                            </a>
+                                            <input id="searchs" type="text"
+                                                class="form-control bg-transparent border-0 rounded-0"
+                                                placeholder="Search for groceries and more"
+                                                data-url="{% url 'customer:search' %}"
+                                                aria-label="Search for groceries and more" aria-describedby="search">
+                                        </div>
+                                    </div>
+                                    <style>
+                                        .searchresult {
+                                            padding: 10px;
+                                            text-decoration: none;
+                                            color: black !important;
+
+
+                                        }
+                                    </style>
+                                    <div class="offcanvas-body p-0">
+                                        <div class="row g-0">
+                                            <div id="searchdiv" class="col-12 border-bottom">
+                                            </div>
+                                            <style>
+
+                                            </style>
+
+
+                                        </div>
+                                    </div>
+   </div>
+   <!-- Categories Modal -->
+   <div class="modal fade" id="categories" tabindex="-1" aria-labelledby="categoriesLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+         <div class="modal-content border-0 rounded-4 h-75">
+            <div class="modal-header border-0 px-4">
+               <div class="modal-title" id="categoriesLabel">
+                  <h5 class="fw-bold text-black mb-1">Shop by categories</h5>
+                  <p class="mb-0">{{catagorycount}} categories</p>
+               </div>
+            </div>
+            <div class="modal-body border-top p-4">
+               <div class="row row-cols-3 gy-3">
+                  {% for cat in catagory %}
+                  <div class="col">
+                     <a href="{% url 'customer:products' %}?catagory={{cat.slug}}" class="link-dark">
+                        <div class="card bg-transparent border-0 text-center">
+                           <img src="{{cat.category_image.url}}" alt="" class="card-img-top rounded-4 mb-2">
+                           <div class="card-body p-0">
+                              <p class="card-title m-0">{{cat.category_name}}</p>
+                           </div>
+                        </div>
+                     </a>
+                  </div>
+                  {% endfor %}
+
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- sidebar nav -->
+   <nav id="main-nav">
+      <ul class="second-nav">
+         <li class="osahan-user-profile bg-primary">
+            <div class="d-flex align-items-center gap-2">
+               <img src="{% static 'images/bht.png' %}" alt="" class="rounded-pill img-fluid">
+               <div class="ps-1">
+                  <h5 class="fw-bold text-white osahan-mb-1">BHT Super Market</h5>
+                  <p class="text-white-50 m-0">{{supermarket}}</p>
+               </div>
+            </div>
+         </li>
+         <li><a href="{% url 'customer:home' %}"><i class="bi bi-house me-3"></i>Homepage</a></li>
+         <li><a href="{% url 'customer:products' %}"><i class="bi bi-grid me-3"></i>Products</a></li>
+         <li><a href="{% url 'customer:mycart' %}"><i class="bi bi-basket me-3"></i>Cart</a></li>
+         <li><a href="{% url 'customer:orders' %}"><i class="bi bi-receipt me-3"></i>Orders</a></li>
+        
+      </ul>
+      
+   </nav>
+   <!-- Bootstrap Bundle Js -->
+   <script src="{% static 'vender/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+   <!-- Jquery -->
+   <script src="{% static 'vender/jquery/jquery.min.js' %}"></script>
+   <!-- Slick Slider Js -->
+   <script src="{% static 'vender/slick/slick/slick.min.js' %}"></script>
+   <!-- <script src="{% static 'js/custom.js' %}"></script> -->
+   <script src="{% static 'js/myjs.js' %}"></script>
+   <!-- Sidebar js -->
+   <script src="{% static 'vender/sidebar/hc-offcanvas-nav.js' %}"></script>
+   <!-- Custom Js -->
+   <script src="{% static 'js/home.js' %}"></script>
+</body>
+
+</html>

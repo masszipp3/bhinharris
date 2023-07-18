@@ -1,0 +1,538 @@
+{% load static %}
+{% load custom_filters %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/logo.png" type="image/png">
+    <title>BHT Super Market - Food & Grocery Delivery</title>
+    <!-- Bootstrap Css -->
+    <link rel="stylesheet" href="{% static 'vender/bootstrap/css/bootstrap.min.css' %}">
+    <!-- Icofont -->
+    <link rel="stylesheet" href="{% static 'vender/icofont/icofont.min.css' %}">
+    <!-- Sidebar css -->
+    <link rel="stylesheet" href="{% static 'vender/sidebar/demo.css' %}">
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <style>
+        .cartitems {
+            width: 100%;
+            height: 80px;
+            background-color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            border: 2px solid white;
+            position: fixed;
+            z-index: 9999;
+            bottom: 0;
+            display: flex;
+            flex-basis: 50%;
+            align-items: center;
+            justify-content: center;
+
+
+        }
+
+        .view-cart {
+
+            width: 100%;
+            padding: 2%;
+            background-color: #0d8420;
+            margin: 5%;
+            text-align: center;
+            border-radius: 10px;
+            color: white;
+            font-weight: 900;
+            border-color: aliceblue;
+            text-transform: uppercase !important;
+            font-family: 'Rubik,sans-serif';
+
+        }
+
+
+        .cart-det {
+            width: 100%;
+            padding: 3%;
+            margin: 5%;
+            text-align: center;
+
+
+        }
+
+        .cartcount {
+            margin: auto;
+            line-height: 20px;
+            font-size: medium;
+            margin-top: 10px !important;
+            color: rgb(107, 113, 103);
+            font-size: .8rem;
+        }
+
+        .cart-price {
+            font-size: 1rem;
+            ;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="listing d-flex flex-column vh-100">
+        <!-- <div style="width: 100%; height: 100px; background-color: blue; position: fixed; bottom: 0;   z-index: 9999;">HEllo</div> -->
+
+        <!-- navbar -->
+        <div class="listing-navbar bg-primary d-flex align-items-center gap-3 shadow-sm mb-auto p-3" id="minuspro"
+            data-url="{% url 'customer:removecart' %}">
+            <a href="{% if web %} {% url 'customer:customerpcweb' %} {% else %}  {% url 'customer:home' %} {% endif %}"><i class="bi bi-arrow-left text-white fs-5"></i></a>
+            <a href="#" class="text-white" data-bs-toggle="modal" data-bs-target="#categories">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="bg-white rounded p-1">
+                        <img src="{% static 'images/bht.png' %}" alt="" class="img-fluid">
+                    </span>
+                    <div>
+                        <h6 class="fw-bold text-white mb-0">BHT</h6>
+                        <p class="text-white-50 small m-0">Super Store</p>
+                    </div>
+                </div>
+            </a>
+            <div class="d-flex align-items-center gap-2 ms-auto" id="addpro" data-url="{% url 'customer:addtocart' %}">
+                <a href="#" class="link-dark bg-light rounded-circle user-icon" data-bs-toggle="offcanvas"
+                    data-bs-target="#searchoffcanvas" aria-controls="searchoffcanvas"><i
+                        class="icofont-search-1 fs-6"></i></a>
+                <a class="toggle" href="#">
+                    <b class="link-dark bg-light rounded-circle user-icon">
+                        <i class="bi bi-list d-flex m-0 h4"></i>
+                    </b>
+                </a>
+            </div>
+        </div>
+
+        <!-- body -->
+
+        
+
+        <div class="cartitems">
+            <div class="cart-det">
+                {% if count == 0 %}
+                <p class="cartcount" id="counts">No items in the cart</p>
+                <p class="cart-price" id="total"></p>
+                {% elif count == 1 %}
+                <p class="cartcount" id="counts">{{count}} item in cart</p>
+                <p class="cart-price" id="total">{{total}} Rs</p>
+                {% else %}
+                <p class="cartcount" id="counts">{{count}} items in cart</p>
+                <p class="cart-price" id="total">{{total}} Rs</p>
+                {% endif %}
+
+            </div>
+            <a href="{% url 'customer:mycart' %}" class="view-cart">
+                View Cart
+            </a>
+
+        </div>
+        {% csrf_token %}
+        <div class="my-auto overflow-auto" id="scroll">
+            <div class="d-flex gap-1">
+                <div class="listing-left overflow-scroll vh-100 " style="padding-bottom: 90px;">
+                    <div class="bg-white rounded shadow-sm sticky-top overflow-hidden p-2">
+                        <div class="nav flex-column osahan-item-sidebar nav-pills" id="v-pills-tab" role="tablist"
+                            aria-orientation="vertical">
+                            <a class="nav-link " href="{% url 'customer:products' %}" id="v-pills-home-tab"
+                                type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">
+                                <div>
+                                    <img src="https://www.luluhypermarket.in/medias/Scoll-09.jpg?context=bWFzdGVyfHJvb3R8ODQzNjF8aW1hZ2UvanBlZ3xhR1ptTDJneE5DODVNak0yTkRZME9ESTRORFEyTDFOamIyeHNMVEE1TG1wd1p3fDY2NDAwYThlZTEwOTU3NjM4Y2E1ODk5NzQ1OTBhMGQ1MmE0NTZkNmJkYTFiYThhZGVmMzJkNThiM2M4NDlmMjM"
+                                        alt="" class="img-fluid bg-light rounded">
+                                    <p class="pt-2 m-0 small">Hot Deals</p>
+                                </div>
+                            </a>
+                            {% for cat in catagory %}
+                            <a class="nav-link " href="{% url 'customer:products' %}?catagory={{cat.slug}}"
+                                id="v-pills-home-tab" type="button" role="tab" aria-controls="v-pills-home"
+                                aria-selected="true">
+                                <div>
+                                    <img src="{{cat.category_image.url}}" alt="" class="img-fluid bg-light rounded">
+                                    <p class="pt-2 m-0 small">{{cat.category_name}}</p>
+                                </div>
+                            </a>
+                            {% endfor %}
+
+                            <!-- <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-profile" type="button" role="tab"
+                                aria-controls="v-pills-profile" aria-selected="false">
+                                <div>
+                                    <img src="https://www.luluhypermarket.in/medias/Scoll-10.jpg?context=bWFzdGVyfHJvb3R8ODUzMDJ8aW1hZ2UvanBlZ3xhRE5sTDJneE5DODVNak0yTkRZME9Ea3pPVGd5TDFOamIyeHNMVEV3TG1wd1p3fDBmNTdmOWRlNTZkMjAxYjI0NTU3MmUzZTIxNGJmODYwMWY1ZmFlYjVmZTAzZmMwODZiYTI2OWEzYWM1NzAwYjQ" alt="" class="img-fluid bg-light rounded">
+                                    <p class="pt-2 m-0 small">Rice, Atta & Dal</p>
+                                </div>
+                            </button>
+                            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-messages" type="button" role="tab"
+                                aria-controls="v-pills-messages" aria-selected="false">
+                                <div>
+                                    <img src="https://www.luluhypermarket.in/medias/Scoll-16.jpg?context=bWFzdGVyfHJvb3R8NzgwMjV8aW1hZ2UvanBlZ3xhRE5tTDJneE1TODVNak0yTkRZME9UVTVOVEU0TDFOamIyeHNMVEUyTG1wd1p3fDg5NGQzYjM2ZWFmMWVjMWRiMTdhNzk5MWVmMjJhN2ZmZjVmOTE2ZDEwZTdjODcyOTc1OTlmMTlkYWNiZjk1MWI" alt="" class="img-fluid bg-light rounded">
+                                    <p class="pt-2 m-0 small">Oils, Masalas & more</p>
+                                </div>
+                            </button>
+                            <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-settings" type="button" role="tab"
+                                aria-controls="v-pills-settings" aria-selected="false">
+                                <div>
+                                    <img src="https://www.luluhypermarket.in/medias/Scoll-14.jpg?context=bWFzdGVyfHJvb3R8ODE5MDF8aW1hZ2UvanBlZ3xhRE5qTDJnelpDODVNak0yTkRZMU1UVTJNVEkyTDFOamIyeHNMVEUwTG1wd1p3fDUyNmE0NjM1ZGQzODk4MWY3MmFhNDljNTRiNjgyM2Q1YTFhMDQ2YTE0YzYxYmNlZjI0ZGE0NDBhODFiN2VjNjI" alt="" class="img-fluid bg-light rounded">
+                                    <p class="pt-2 m-0 small">Breakfast & Snaks</p>
+                                </div>
+                            </button> -->
+                        </div>
+                    </div>
+                </div>
+                <div id="leftlist" class="listing-right vh-100" style="padding-bottom: 90px;">
+                    <div class="bg-white rounded shadow-sm">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                                aria-labelledby="v-pills-home-tab" tabindex="0">
+                                <!-- <div class="border-bottom p-2">
+                                    
+                                    <p class="text-muted pt-2 mb-0"><span class="fw-bold text-dark">42 items</span> in
+                                        Hot Deals
+                                    </p>
+                                </div> -->
+                                <style>
+
+                                </style>
+                                {% if porducts.has_next %}
+                                <input id="nextpage" type="hidden" value="yes">
+                                {% else %}
+                                <input id="nextpage" type="hidden" value="no">
+                                {% endif %}
+
+                                <div class="row border-bottom g-0 pt-2" style="padding-bottom: 90px;" id="productsdiv"
+                                    data-url="{% url 'customer:products' %}">
+                                    {% for product in porducts %}
+                                    {% with quantitys=quantity|get_item:product.id %}
+                                    <div
+                                        class="col-6 {% if forloop.counter|divisibleby:2 %} border-end{% endif %} bordr">
+                                        <div class="card bg-transparent border-0 p-2 h-100">
+                                            {% if product.Discount == 0.0 %}
+                                            <div
+                                                class="bg-success position-absolute top-0 text-white osahan-badge text-center">
+                                                <b>BHT</b><br>Assured
+                                            </div>
+                                            {% else %}
+                                            <div
+                                                class="bg-success position-absolute top-0 text-white osahan-badge text-center">
+                                                <b>{{product.Discount|floatformat}}</b>% <br> OFF
+                                            </div>
+                                            {% endif %}
+                                           
+                                            <a href="{% url 'customer:product_details' product.slug %}">
+                                                <img src="{{product.product_image.url}}" alt=""
+                                                    class="img-fluid w-75 d-block mx-auto">
+                                            </a>
+                                            <div class="card-body p-0 mb-3">
+                                                <small class="text-muted">{{ product.brand }}</small>
+                                                <p class="card-title fw-bold mb-0">{{ product.Product_name }}</p>
+                                            </div>
+                                            <div class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0"
+                                                id="addurl" data-url="{% url 'customer:addtocart' %}">
+                                                <div class="cartdet">
+                                                    <p id="{{ product.id  }}" class="checkid text-muted mb-1">
+                                                        {{product.Min_value}}{{product.Unit_type}}</p>
+                                                    <del class="text-muted small"> OMR{{product.Price}}</del>
+                                                    <p class="fw-bold m-0"> OMR{{product.final_total}}</p>
+                                                </div>
+                                                <button
+                                                    class="btn proadd btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</button>
+                                                <div style="display: none !important;"
+                                                    class=" productcountdiv none osahan-count d-flex align-items-center justify-content-between border border-dark-subtle rounded-pill h6 m-0 p-1">
+                                                    <span class="text-muted minus d-flex"><i
+                                                            class="icofont-minus-circle"></i></span>
+                                                    <input type="text" value="{{ quantitys|default:'0' }}"
+                                                        ppid="{{product.id}}" disabled id="productcount01"
+                                                        class="lh-sm small text-black text-center box border-0"
+                                                        value="0">
+                                                    <span id="minusurl" data-url="{% url 'customer:removecart' %}"
+                                                        class="text-muted plus d-flex"><i
+                                                            class="icofont-plus-circle"></i></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    {% endwith %}
+                                    {% endfor %}
+
+                                   
+                                </div>
+                                <span class="flexing bg-light"
+                                style="display: flex;justify-content: center; border: 0; box-shadow: none;    ">
+
+                                <span class="loaders" style="margin: 2%; display: none;" id="loader"></span>
+                            </span>
+
+
+                               
+
+
+
+
+                                <!-- Search Offcanvas -->
+                                <div class="offcanvas offcanvas-bottom border-0 h-100" tabindex="-1"
+                                    id="searchoffcanvas" aria-labelledby="searchoffcanvasLabel">
+                                    <div class="offcanvas-header">
+                                        <div class="input-group bg-white rounded-3 border p-0">
+                                            <a href="#" class="input-group-text bg-transparent border-0 rounded-0"
+                                                id="search" data-bs-dismiss="offcanvas" aria-label="Close">
+                                                <i class="bi bi-arrow-left fs-5"></i>
+                                            </a>
+                                            <input id="searchs" type="text"
+                                                class="form-control bg-transparent border-0 rounded-0"
+                                                placeholder="Search for groceries and more"
+                                                data-url="{% url 'customer:search' %}"
+                                                aria-label="Search for groceries and more" aria-describedby="search">
+                                        </div>
+                                    </div>
+                                    <style>
+                                        .searchresult {
+                                            padding: 10px;
+                                            text-decoration: none;
+                                            color: black !important;
+
+
+                                        }
+                                    </style>
+                                    <div class="offcanvas-body p-0">
+                                        <div class="row g-0">
+                                            <div id="searchdiv" class="col-12 border-bottom">
+                                            </div>
+                                            <style>
+
+                                            </style>
+
+
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="col-6">
+                                        <div class="card bg-transparent border-0 p-2 h-100">
+                                            <a href="product-detail.html">
+                                                <img src="https://www.luluhypermarket.in/medias/889174-001.jpg-300Wx300H?context=bWFzdGVyfGltYWdlc3w2MzA4NnxpbWFnZS9qcGVnfGFEUmtMMmcxT0M4NE9UTTFPVFk1TWpJMk56Z3lMemc0T1RFM05DMHdNREV1YW5Cblh6TXdNRmQ0TXpBd1NBfDFiNjQ0NjQzOWQ3Yjg1OWIyZTEzMWYxMmQ4N2MzNGYzYWJjZjEzNTAzNmMxMzZhOWFjMTlmMmNhNjFhNWQ1ZmE" alt=""
+                                                    class="img-fluid w-75 d-block mx-auto">
+                                            </a>
+                                            <div class="card-body p-0 mb-3">
+                                                <small class="text-muted">Ashirvaad</small>
+                                                <p class="card-title fw-bold mb-0">Shubh Chakki Atta</p>
+                                            </div>
+                                            <div
+                                                class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0">
+                                                <div>
+                                                    <p class="text-muted mb-1">10 Kg</p>
+                                                    <del class="text-muted small">$448</del>
+                                                    <p class="fw-bold m-0">$430</p>
+                                                </div>
+                                                <a href="cart.html"
+                                                    class="btn btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 border-end">
+                                        <div class="card bg-transparent border-0 p-2 h-100">
+                                            <div
+                                                class="bg-primary position-absolute top-0 text-white osahan-badge text-center">
+                                                <b>5%</b><br>OFF</div>
+                                            <a href="product-detail.html">
+                                                <img src="https://www.luluhypermarket.in/medias/1266191-01.jpg-300Wx300H?context=bWFzdGVyfGltYWdlc3wyMjg1NXxpbWFnZS9qcGVnfGFHUXhMMmd5WkM4NU1EZzNOalEwTlRrNE16QXlMekV5TmpZeE9URXRNREV1YW5Cblh6TXdNRmQ0TXpBd1NBfGRlOGY1NGIyOGE2ODgxYzFhODkyNzY1ZGU1MGY3NDY2Nzk4NmU2ZTkzNWE4NDBjMzYzZDZlMjY4ODIzZmNmYWM" alt=""
+                                                    class="img-fluid w-75 d-block mx-auto">
+                                            </a>
+                                            <div class="card-body p-0 mb-3">
+                                                <small class="text-muted">Fortune</small>
+                                                <p class="card-title fw-bold mb-0">Basan Flour</p>
+                                            </div>
+                                            <div
+                                                class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0">
+                                                <div>
+                                                    <p class="text-muted mb-1">500 g</p>
+                                                    <del class="text-muted small">$70</del>
+                                                    <p class="fw-bold m-0">$51</p>
+                                                </div>
+                                                <a href="cart.html"
+                                                    class="btn btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card bg-transparent border-0 p-2 h-100">
+                                            <a href="product-detail.html">
+                                                <img src="https://www.luluhypermarket.in/medias/1346748-01.jpg-300Wx300H?context=bWFzdGVyfGltYWdlc3w3ODMzNnxpbWFnZS9qcGVnfGFEUXdMMmd6WlM4NU1EazFPVEU0TnpRM05qYzRMekV6TkRZM05EZ3RNREV1YW5Cblh6TXdNRmQ0TXpBd1NBfGQ1YzQxMGQxZjgzODc1Y2ViNmFlOTM2ZGMwMjEyZjQzZDZmZjgyMzU2MzcyMDk3Mjg1ODRiMDJiNGNkODRhYTY" alt=""
+                                                    class="img-fluid w-75 d-block mx-auto">
+                                            </a>
+                                            <div class="card-body p-0 mb-3">
+                                                <small class="text-muted">Coca-Cola</small>
+                                                <p class="card-title fw-bold mb-0">Coca Cola (Bottle)</p>
+                                            </div>
+                                            <div
+                                                class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0">
+                                                <div>
+                                                    <p class="text-muted mb-1">2 L x 2</p>
+                                                    <del class="text-muted small">$190</del>
+                                                    <p class="fw-bold m-0">$173</p>
+                                                </div>
+                                                <a href="cart.html"
+                                                    class="btn btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                
+                                
+                                    
+                                    
+                                
+                                    <div class="col-6 border-end">
+                                        <div class="card bg-transparent border-0 p-2 h-100">
+                                            <a href="product-detail.html">
+                                                <img src="https://www.luluhypermarket.in/medias/1341638-01.jpg-300Wx300H?context=bWFzdGVyfGltYWdlc3w0OTAyMnxpbWFnZS9qcGVnfGFEUXlMMmhqWVM4NU1EazNNRFU0TURreE1ETTRMekV6TkRFMk16Z3RNREV1YW5Cblh6TXdNRmQ0TXpBd1NBfDliNmFjYzcwYmM0MjBkZTBjMTdlZGJjYjhjN2FmMWFlZGFlNWQ5ZmRlN2JiYWVmMjk1Mjc1YmY1MWE3Nzk0NDE" alt=""
+                                                    class="img-fluid w-75 d-block mx-auto">
+                                            </a>
+                                            <div class="card-body p-0 mb-3">
+                                                <small class="text-muted">Tata Tea</small>
+                                                <p class="card-title fw-bold mb-0">Tata Premium Tea</p>
+                                            </div>
+                                            <div
+                                                class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0">
+                                                <div>
+                                                    <p class="text-muted mb-1">1 Kg</p>
+                                                    <del class="text-muted small">$510</del>
+                                                    <p class="fw-bold m-0">$469</p>
+                                                </div>
+                                                <a href="cart.html"
+                                                    class="btn btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card bg-transparent border-0 p-2 h-100">
+                                            <a href="product-detail.html">
+                                                <img src="https://www.luluhypermarket.in/medias/1910-001.jpg-300Wx300H?context=bWFzdGVyfGltYWdlc3w3NDAxfGltYWdlL2pwZWd8YUdZMEwyaGpNUzg0T0RZM05qUTJNVGMzTXpFd0x6RTVNVEF0TURBeExtcHdaMTh6TURCWGVETXdNRWd8MjdjNGU4YjY2YzFmMjhmMTE3ZjQ1ZmNjNTcxMWM4MDJiZmExOWJlYmFkMDVmYjkyYWE5NzQwZTUwZTIwNjEwMg" alt=""
+                                                    class="img-fluid w-75 d-block mx-auto">
+                                            </a>
+                                            <div class="card-body p-0 mb-3">
+                                                <small class="text-muted">Nescafe</small>
+                                                <p class="card-title fw-bold mb-0">Clasic Instant Coffee Powder (Jar)
+                                                </p>
+                                            </div>
+                                            <div
+                                                class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0">
+                                                <div>
+                                                    <p class="text-muted mb-1">95 g</p>
+                                                    <del class="text-muted small">$330</del>
+                                                    <p class="fw-bold m-0">$307</p>
+                                                </div>
+                                                <a href="cart.html"
+                                                    class="btn btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                             
+                               
+                                    <div class="col-6 border-end">
+                                        <div class="card bg-transparent border-0 p-2 h-100">
+                                            <a href="product-detail.html">
+                                                <img src="https://www.luluhypermarket.in/medias/1207489-0001.jpg-300Wx300H?context=bWFzdGVyfGltYWdlc3wxMTA3NTR8aW1hZ2UvanBlZ3xhR1kxTDJobVpDODVNRE01TmpReE9UWTROamN3THpFeU1EYzBPRGt0TURBd01TNXFjR2RmTXpBd1YzZ3pNREJJfDIwNjExNmE4ZmI0MmRiM2FlYjAzNGFhMmM3YzA1NzUxYTQ5NDBjMTJkZTQzNGE2YzJkNGYzNzg3MzIzZTY1ODA" alt=""
+                                                    class="img-fluid w-75 d-block mx-auto">
+                                            </a>
+                                            <div class="card-body p-0 mb-3">
+                                                <small class="text-muted">Britannia</small>
+                                                <p class="card-title fw-bold mb-0">Good Day Rich Cashew Cookies</p>
+                                            </div>
+                                            <div
+                                                class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0">
+                                                <div>
+                                                    <p class="text-muted mb-1">600 g</p>
+                                                    <del class="text-muted small">$240</del>
+                                                    <p class="fw-bold m-0">$199</p>
+                                                </div>
+                                                <a href="cart.html"
+                                                    class="btn btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card bg-transparent border-0 p-2 h-100">
+                                            <div
+                                                class="bg-warning position-absolute top-0 text-black osahan-badge text-center">
+                                                <b>5%</b><br>OFF</div>
+                                            <a href="product-detail.html">
+                                                <img src="https://www.luluhypermarket.in/medias/1207495-0001.jpg-300Wx300H?context=bWFzdGVyfGltYWdlc3wxMDYxODN8aW1hZ2UvanBlZ3xhR1kzTDJoaE15ODVNRE01TnpZNE56Z3dPRE13THpFeU1EYzBPVFV0TURBd01TNXFjR2RmTXpBd1YzZ3pNREJJfDQ2Njg4YWRjZDQyNzY4NGI3NWUxMzIyNWZjNjYzNjIzZTQ1YzJlNGFmM2Q2NGZlNDc1Y2M0ZDUxNjEwMWYxZDY" alt=""
+                                                    class="img-fluid w-75 d-block mx-auto">
+                                            </a>
+                                            <div class="card-body p-0 mb-3">
+                                                <small class="text-muted">Dettol</small>
+                                                <p class="card-title fw-bold mb-0">Orignal Germ Protection Bathing..</p>
+                                            </div>
+                                            <div
+                                                class="card-footer bg-transparent border-0 d-flex align-items-end justify-content-between p-0">
+                                                <div>
+                                                    <p class="text-muted mb-1">500 g</p>
+                                                    <del class="text-muted small">$322</del>
+                                                    <p class="fw-bold m-0">$306</p>
+                                                </div>
+                                                <a href="cart.html"
+                                                    class="btn btn-outline-success btn-sm border-dark-subtle fw-bold rounded-3 shadow-sm px-3">ADD</a>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- sidebar nav -->
+                        <!-- sidebar nav -->
+   <nav id="main-nav">
+    <ul class="second-nav">
+       <li class="osahan-user-profile bg-primary">
+          <div class="d-flex align-items-center gap-2">
+             <img src="{% static 'images/bht.png' %}" alt="" class="rounded-pill img-fluid">
+             <div class="ps-1">
+                <h5 class="fw-bold text-white osahan-mb-1">BHT Super Market</h5>
+                <p class="text-white-50 m-0">{{supermarket}}</p>
+             </div>
+          </div>
+       </li>
+       <li><a href="{% url 'customer:home' %}"><i class="bi bi-house me-3"></i>Homepage</a></li>
+       <li><a href="{% url 'customer:products' %}"><i class="bi bi-grid me-3"></i>Products</a></li>
+       <li><a href="{% url 'customer:mycart' %}"><i class="bi bi-basket me-3"></i>Cart</a></li>
+       <li><a href="{% url 'customer:orders' %}"><i class="bi bi-receipt me-3"></i>Orders</a></li>
+      
+    </ul>
+    
+ </nav>
+
+
+                        <!-- Bootstrap Bundle Js -->
+                        <script src="{% static 'vender/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+                        <!-- Jquery -->
+                        <script src="{% static 'vender/jquery/jquery.min.js' %}"></script>
+                        <!-- Sidebar js -->
+                        <script src="{% static 'vender/sidebar/hc-offcanvas-nav.js' %}"></script>
+                        <!-- Custom Js -->
+                        <script src="{% static 'js/custom.js' %}"></script>
+
+                        <script src="{% static 'js/myjs.js' %}"></script>
+
+                        <script src="{% static 'vender/slick/slick/slick.min.js' %}"></script>
+</body>
+
+</html>

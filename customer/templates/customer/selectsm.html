@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'vender/bootstrap/css/bootstrap.min.css' %}">
+    <!-- Icofont -->
+    <link rel="stylesheet" href="{% static 'vender/icofont/icofont.min.css' %}">
+    <!-- Sidebar css -->
+    <link rel="stylesheet" href="{% static 'vender/sidebar/demo.css' %}">
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script>
+        function submitForm() {
+           document.getElementById("myForm").submit();
+            }
+   </script>
+</head>
+<body>
+    
+    <div class="offcanvas-header bg-transparent p-0">
+  
+        <div class="ratio ratio-4x3 postion-relative z-n1">
+            <img src="{% static 'images/delivery.jpg' %}" class="border-0 w-100" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+    <div class="offcanvas-body p-0">
+        <div class="d-flex align-items-center bg-light p-3 gap-3 py-3 border-top border-bottom">
+            <i class="icofont-map-pins icofont-2x text-primary"></i>
+            <div class="text-truncate">
+                <h6 class="mb-0">Choose a City <span class="fw-bold"></span></h6>
+                <p class="text-muted text-truncate m-0">Aqwad, Salalah</p>
+            </div>
+            <div class="ms-auto">
+               
+            </div>
+        </div>
+        <form class="p-5" id="myform" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <div class="d-flex gap-3 align-items-center justify-content-between">
+                    {% for sm in super %}
+                    <input name="selectsm" type="radio" value="{{ sm.id }}" class="btn-check" name="btnradio" id="btnradio{{sm.id}}d" autocomplete="off">
+                    <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio{{sm.id}}d" style="padding-top: 1rem!important; padding-bottom: 1rem!important;"><i
+                        class="icofont-location-pin me-2"></i>{{sm.address}}</label>
+                    {% endfor %}    
+                   
+
+                    <!-- <input type="radio" class="btn-check" name="btnradio" id="btnradio2d" autocomplete="off">
+                    <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio2d"><i class="icofont-bag-alt me-2"></i>Other</label><br>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3d" autocomplete="off">
+                    <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio3d" style="padding-top: 1rem!important; padding-bottom: 1rem!important;"><i
+                            class="icofont-location-pin me-2"></i>Thumrait</label>  -->
+                </div>
+            </div>
+            
+           <!-- <button type="submit"></button> -->
+           <div class="offcanvas-footer pt-5">
+            <button type="submit" class="btn btn-success text-uppercase w-100 btn-lg fw-bold" >Save & proceed</button>
+        </div>
+        </form>
+        
+       
+        
+
+    </div>
+    
+   
+
+    <!-- Bootstrap Bundle Js -->
+    <script src="{% static 'vender/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Jquery -->
+    <script src="{% static 'vender/jquery/jquery.min.js' %}"></script>
+    <!-- Sidebar js -->
+    <script src="{% static 'vender/sidebar/hc-offcanvas-nav.js' %}"></script>
+    <!-- Custom Js -->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/myjs.js' %}"></script>
+</body>
+</html>

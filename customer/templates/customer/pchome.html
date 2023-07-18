@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="icon" href="img/logo.png" type="image/png">
+   <title>BHT Super Mart</title>
+   <!-- Bootstrap Css -->
+   <link rel="stylesheet" href="{% static 'vender/bootstrap/css/bootstrap.min.css' %}">
+   <!-- Icofont -->
+   <link rel="stylesheet" href="{% static 'vender/icofont/icofont.min.css' %}">
+   <!-- Sidebar css -->
+   <link rel="stylesheet" href="{% static 'vender/sidebar/demo.css' %}">
+   <link rel="stylesheet" href="{% static 'vender/slick/slick/slick.css' %}">
+   <link rel="stylesheet" href="{% static 'vender/slick/slick/slick-theme.css' %}">
+
+   <!-- Custom Css -->
+   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+   <link rel="stylesheet" href="{% static 'css/pccss.css' %}">
+   <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+      crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<style>
+   .heading {
+      display: flex;
+      margin: auto;
+      align-items: center;
+
+   }
+
+   .heading h6 {
+      padding-top: 40px;
+      color: white;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-size: 40px;
+      padding-bottom: 1px;
+   }
+
+   .heading p {
+      color: white;
+      font-size: 20px;
+      font-family: cursive;
+      width: 58%;
+   }
+</style>
+
+
+
+<body style="background-color: rgb(101, 3, 45);">
+   <section class="demo-section vh-100 position-relative">
+      <div class="container px-lg-5">
+         <div class="row align-items-center vh-100">
+            <div class="col-8">
+               <div class="heading">
+                  <img src="{% static 'images/bht.png' %}" width="200px" alt="">
+                  <div>
+                     <H6>BHT SUPER MART</H6>
+                     <p class="mt-4">"Shop Smart, Shop Conveniently: Your Online Supermarket Experience"</p>
+                     <div class="hd" style="height: 100px;">
+
+
+                        <div class="loop-wrapper" id="truck">
+                           <div class="mountain"></div>
+                           <div class="hill"></div>
+                           <div class="tree"></div>
+                           <div class="tree"></div>
+                           <div class="tree"></div>
+                           <div class="rock"></div>
+                           <div class="truck"></div>
+                           <div class="wheels"></div>
+                        </div>
+                        <p id="description"> -- Opens at 6AM to Late Night Everyday </p>
+                     </div>
+
+                  </div>
+
+
+
+               </div>
+
+
+
+            </div>
+            <div class="demo-section-demo col-md-4 col-xl-4 order-1 order-sm-1 order-md-1 order-xl-2 order-lg-2">
+               <div class="d-flex gap-4">
+                  <div class="hidden" id="screen">
+                     <div class="volume style-2"></div>
+                     <div class="switch style-2"></div>
+                     <div class="iframe">
+                        <iframe name="preview" id="myFrame" data-url="{% url 'customer:home' %}" src="{% url 'customer:customerpcweb' %}?referrer=web" height="700px" width="375px"></iframe>
+                     </div>
+                  </div>
+
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- <img src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_400/InstamartMicrosite/BGBottom" width="100%" alt=""> -->
+   </section>
+   <!-- <script>
+      var mobileUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1";
+      var iframe = document.getElementById("myFrame");
+      iframe.src = iframe.getAttribute("data-url");
+      iframe.setAttribute("sandbox", ""); // Optionally, add sandbox attribute for security
+   
+      // Create and set User-Agent header
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", iframe.src, true);
+      xhr.setRequestHeader("User-Agent", mobileUserAgent);
+      xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+         iframe.src = URL.createObjectURL(new Blob([xhr.responseText], { type: "text/html" }));
+      }
+      };
+      xhr.send();
+   </script> -->
+   <script src="{% static 'vender/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+   <!-- Jquery -->
+   <script src="{% static 'vender/jquery/jquery.min.js' %}"></script>
+   <!-- Sidebar js -->
+   <script src="{% static 'vender/sidebar/hc-offcanvas-nav.js' %}"></script>
+   <!-- Custom Js -->
+   <script src="{% static 'vender/slick/slick/slick.min.js' %}"></script>
+   <script src="{% static 'js/demo.js' %}"></script>
+   <script src="{% static 'js/myjs.js' %}"></script>
+</body>
+
+</html>
