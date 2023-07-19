@@ -24,7 +24,7 @@ from . decorator import checkmobile
 
 # Create your views here.
 @checkmobile
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def index(request):
     user_Agent= request.META.get('HTTP_USER_AGENT', '')
     mobile=re.search(r'mobile|android|iphone|ipad|ipod', user_Agent, re.IGNORECASE)
@@ -54,7 +54,7 @@ def index(request):
     else:
         return redirect('customer:pchome')
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def customerhomepc(request):
     supermarkets=Supermarket.objects.values('id', 'slug', 'name','address')
     if request.method=='POST':
@@ -84,8 +84,7 @@ def is_ajax(request):
 
 
 
-
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def products(request):
     web=''
     user_Agent= request.META.get('HTTP_USER_AGENT', '')
@@ -179,7 +178,7 @@ def products(request):
         
         return render( request,'customer/products.html',{'porducts':productpage,'catagory':catagory,'quantity':quantities,'total':round(total,2),'count':count,'web':web})
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def product_detail(request,slug):
     request.session['discount']=0
     product=Product.objects.get(slug=slug,Supermarket_name__id=request.session['supermarket'],onstock=True)
@@ -189,7 +188,7 @@ def product_detail(request,slug):
         carts={'quantity':0} 
     return render( request,'customer/product_details.html',{'product_data':product,'quandity':carts})
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def cart(request):
     request.session['discount']=0
     time_slot=''
@@ -282,7 +281,7 @@ def cart(request):
     return render( request,'customer/cart.html',{'cart':cartdetails,'cartcount':cartdetails.count(),'total':round(total,2),'coupon':coupon,'customer':custmerdet,
                                                  'timeslot':time_slot_choices,'delivery':deliveryoptions,'available':available_time_slots,'discount':round(discountedprice,2)})
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def applycoupon(request):
     total=0
     if request.method=='POST':
@@ -300,7 +299,7 @@ def applycoupon(request):
 
     
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def addcart(request):
     msgfrom=request.POST.get('from',False)
     actualtotal=0
@@ -363,7 +362,7 @@ def addcart(request):
                 
         return JsonResponse({'data':'success','quantity':cart_item.quantity})
 
-@login_required(login_url='/customer/login')    
+@login_required(login_url='/login')
 def removefromcart(request):
     msgfrom=request.POST.get('from',False)
     actualtotal=0
@@ -404,7 +403,7 @@ def removefromcart(request):
         
         
             
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def selectsup(request):
     supermarket=Supermarket.objects.values('id', 'slug', 'name','address')
     if request.method=='POST':
@@ -455,7 +454,7 @@ def customerlogin(request):
     else:
         return redirect('customer:home')
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def orderplaced(request):
     return render( request,'customer/orderplaced.html')
 
@@ -471,14 +470,14 @@ def pchome(request):
         
 
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def ordercancel(request,oid):
     order=Order.objects.get(OrderId=oid)
     order.status='Rejected'
     order.save()
     return redirect('customer:orders')
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def orderdetails(request,oid):
     total=0
     order=Order.objects.get(OrderId=oid)
@@ -489,7 +488,7 @@ def orderdetails(request,oid):
     print(orderitems)
     return render( request,'customer/orderdetails.html',{'order':order,'grandtotal':order.total_price,'orderdetails':orderitems,'discount':round(float(discount),2),'total':round(total,2),'discountedprice':round(float(total-discount),2),'count':orderitems.count()})
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def customerorders(request):
     order=Order.objects.filter(user_id=request.session['customer']).order_by('-created_at')
     orderdetails=OrderItem.objects.filter(order__in=order)
@@ -502,7 +501,7 @@ def customerorders(request):
     return render( request,'customer/orders.html',{'orderdetails':order,'count':order.count(),'total':orderdet,'productscount':product_counts_dict})
 
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 def formsubmit(request):
     if request.method=='POST':
         bhtapp=request.POST.get('bht')
@@ -544,7 +543,7 @@ def formsubmit(request):
     return JsonResponse({'data':'invalidrequest'})
 
 
-@login_required(login_url='/customer/login')
+@login_required(login_url='/login')
 
 def searchproducts(request):
 
