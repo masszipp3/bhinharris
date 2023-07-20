@@ -426,7 +426,7 @@ def customerlogin(request):
         if request.method=='POST':
             email=request.POST['email']
             password='binharris$%09*&*&%%%%$'
-            customer_exist= Customer.objects.filter(customer_email=email,is_customer=True).exists()
+            customer_exist= Customer.objects.filter(customer_email=email,user__is_customer=True).exists()
             if customer_exist:
                 user = authenticate(request, username=email, password=password)
                 print(user)

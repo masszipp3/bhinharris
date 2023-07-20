@@ -19,8 +19,10 @@ from datetime import date
 # Create your views here.
 @login_required(login_url='/smsuser/login')
 def index(request):
-    
-    supermrk=Supermarket.objects.get(user=request.user)
+    try:
+        supermrk=Supermarket.objects.get(user=request.user)
+    except Supermarket.DoesNotExist:
+        return redirect('smsuser:login')    
     
     current_year = now().year
     year_total_count = Order.objects.filter(created_at__year=current_year,Supermarketname__id=supermrk.id).count()
