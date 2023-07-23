@@ -428,7 +428,7 @@ def selectsup(request):
             return redirect('customer:customerpcweb')
         else:
             return redirect('customer:home')
-    return render( request,'customer/selectsm.html',{'super':supermarket})
+    return render( request,'customer/select.html',{'super':supermarket})
 
 def customerlogin(request):
     if 'customer' not in request.session:
@@ -443,7 +443,7 @@ def customerlogin(request):
                     login(request, user)
                     customer=Customer.objects.get(user=request.user)
                     request.session['customer']=customer.id
-                    
+
                     return redirect('customer:selectsm') 
                 else:   
                     HttpResponse('error`')

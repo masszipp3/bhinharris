@@ -36,7 +36,7 @@ $(document).ready(function () {
     }
   })
   $('#goback').click(function () {
-    window.history.back();
+    history.go(-1)
   })
 
   $('#searchs').on('input', function () {

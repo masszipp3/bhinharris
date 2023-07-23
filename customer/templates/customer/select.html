@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" href="img/logo.png" type="image/png">
+      <title>Bin Harris</title>
+      <!-- Bootstrap Css -->
+      <link rel="stylesheet" href="{% static 'vender/bootstrap/css/bootstrap.min.css' %}">
+      <!-- Icofont -->
+      <link rel="stylesheet" href="{% static 'vender/icofont/icofont.min.css' %}">
+      <!-- Slick SLider Css -->
+      <link rel="stylesheet" href="{% static 'vender/slick/slick/slick.css' %}">
+      <link rel="stylesheet" href="{% static 'vender/slick/slick/slick-theme2.css' %}">
+      <!-- Sidebar css -->
+      <link rel="stylesheet" href="{% static 'vender/sidebar/demo.css' %}">
+      <!-- Custom Css -->
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+      <link href="https://db.onlinewebfonts.com/c/98a34676ba814c4848424f733521ea58?family=Basis+Grotesque+Pro+Bold"
+      rel="stylesheet">
+      <link href="https://db.onlinewebfonts.com/c/3ddd0e3d1a076e112b27d8d9b7e20200?family=Basis+Grotesque+Pro" rel="stylesheet"> 
+
+   </head>
+   <body class="bg-white">
+    <div class="product-details d-flex flex-column" style="width: 100%; height: 100%; overflow: hidden;">
+        <!-- navbar -->
+
+        <!-- slider -->
+        <div class="vh-100 my-auto" style="margin-bottom: 0 !important;">
+            <!-- <div class="bg-white shadow-sm  mb-3"> -->
+            <div class="product-slider">
+                <div class="product-item">
+                    <img src="{% static 'images/photo1690140287.jpeg' %}" alt="" height="100%" class="img-fluid mx-auto">
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/photo1690140287(1).jpeg' %}" alt="" height="100%" class="img-fluid mx-auto">
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/photo1690140287(2).jpeg' %}" alt="" height="100%" class="img-fluid mx-auto">
+                </div>
+            </div>
+
+            <div class="product-slider text bg-white">
+                <div class="product-item">
+                    <p class="slidetext">Delivered Quickly to your <br>Door Steps</p>
+                </div>
+                <div class="product-item">
+                    <p class="slidetext">Order from the top & <br> favourite Resturent</p>
+
+                    <!-- <img src="img/photo1690140287(1).jpeg" alt="" height="100%" class="img-fluid mx-auto"> -->
+                </div>
+                <div class="product-item">
+                    <p class="slidetext">With a wide collection <br>of cousine</p>
+                </div>
+            </div>
+            <div class="bg-white text-smalls">
+                Ready grab exciting offers today..?
+            </div>
+
+            <div class="btnlo">
+                <a class="btn-org" href="#" data-bs-toggle="offcanvas"
+                data-bs-target="#homelocation" aria-controls="homelocation">Setup Loacation </a>
+            </div>
+            <p class="text-smalls"> Have an account ? <span class="text-warning">Login</span></p>
+
+            <div class="offcanvas offcanvas-bottom border-0 h-100" tabindex="-1" id="homelocation"
+      aria-labelledby="homelocationLabel">
+      <div class="offcanvas-header bg-transparent p-0">
+         <a href="#" class="bg-primary text-white rounded-circle shadow-sm icon-sm m-3 position-absolute z-0 top-0"
+                data-bs-dismiss="offcanvas" aria-label="Close">
+                <i class="bi bi-arrow-left fs-5"></i>
+            </a>
+  
+         <div class="ratio ratio-4x3 postion-relative z-n1">
+             <img src="{% static 'images/delivery.jpg' %}" class="border-0 w-100" allowfullscreen="" loading="lazy"
+                 referrerpolicy="no-referrer-when-downgrade">
+         </div>
+     </div>
+     <div class="offcanvas-body p-0">
+         <div class="d-flex align-items-center bg-light p-3 gap-3 py-3 border-top border-bottom">
+             <i class="icofont-map-pins icofont-2x text-primary"></i>
+             <div class="text-truncate">
+                 <h6 class="mb-0">Choose a City <span class="fw-bold"></span></h6>
+                 <p class="text-muted text-truncate m-0">{{supermarket}}</p>
+             </div>
+             <div class="ms-auto">
+                
+             </div>
+         </div>
+         <form class="p-5" id="myform" method="post">
+             {% csrf_token %}
+             <div class="mb-3">
+                 <div class="d-flex gap-3 align-items-center justify-content-between">
+                     {% for sm in super %}
+                     <input name="selectsm" type="radio" value="{{ sm.id }}" class="btn-check" name="btnradio" id="btnradio{{sm.id}}d" autocomplete="off">
+                     <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio{{sm.id}}d" style="padding-top: 1rem!important; padding-bottom: 1rem!important;"><i
+                         class="icofont-location-pin me-2"></i>{{sm.address}}</label>
+                     {% endfor %}    
+                    
+ 
+                     <!-- <input type="radio" class="btn-check" name="btnradio" id="btnradio2d" autocomplete="off">
+                     <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio2d"><i class="icofont-bag-alt me-2"></i>Other</label><br>
+                     <input type="radio" class="btn-check" name="btnradio" id="btnradio3d" autocomplete="off">
+                     <label class="btn btn-outline-dark col py-2 rounded-2" for="btnradio3d" style="padding-top: 1rem!important; padding-bottom: 1rem!important;"><i
+                             class="icofont-location-pin me-2"></i>Thumrait</label>  -->
+                 </div>
+             </div>
+             
+            <!-- <button type="submit"></button> -->
+            <div class="offcanvas-footer pt-5">
+             <button type="submit" class="btn btn-success text-uppercase w-100 btn-lg fw-bold" >Save & proceed</button>
+         </div>
+         </form>
+         
+        
+         
+ 
+     </div>
+  </div>
+            <!-- detail -->
+            <!-- <div class="pt-4">
+                  <p class="text-primary mb-1">Uncle Chips</p>
+                  <h5 class="fw-bold text-black lh-base">Uncle Chipps Potato Chips - Plain Salted Flavour, Crispy Snacks, 50 g Pouch
+                  </h5>
+               </div>
+               <div class="d-flex align-items-center justify-content-between">
+                  <div class="mb-0">
+                     <p class="text-muted mb-1">50 g</p>
+                     <h6 class="mb-0">$20 <small>(Inclusive of all taxes)</small></h6>
+                  </div>
+                  <div>
+                  </div>
+               </div> -->
+            <!-- </div> -->
+            <!-- important information -->
+            <!-- <div class="bg-white shadow-sm p-3">
+               <h6 class="fw-bold mb-2">Important Information</h6>
+               <p class="text-muted m-0">Treat yourself to some delicious, crunchy, perfectly salted chips! Uncle Chipps is undeniably everyone’s favourite! For years, they have been around and have been a constant source of fun and pleasant memories. Made from the best quality potatoes and simply seasoned with salt, Uncle Chipps are a flavorful delight! Enjoy watching your favourite programs with a bag of Uncle Chipps or have this delicious treat on your quick work break. These chips are just perfect to snack on and their irresistible flavour makes them the ideal go-to treat.
+               </p>
+            </div>
+         </div>
+         <div class="mt-auto bg-white p-3">
+            <a href="cart.html" class="btn btn-success w-100 text-uppercase btn-lg fw-bold">ADD TO CART</a>
+         </div> -->
+        </div>
+      <!-- Bootstrap Bundle Js -->
+      <script src="{% static 'vender/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <!-- Jquery -->
+      <script src="{% static 'vender/jquery/jquery.min.js' %}"></script>
+      <!-- Slick Slider Js -->
+      <script src="{% static 'vender/slick/slick/slick.min.js' %}"></script>
+      <!-- Sidebar js -->
+      <script src="{% static 'vender/sidebar/hc-offcanvas-nav.js' %}"></script>
+      <!-- Custom Js -->
+      <script src="{% static 'js/custom2.js' %}"></script>
+      <script src="{% static 'js/myjs.js' %}"></script>
+   </body>
+</html>
