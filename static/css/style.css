@@ -55,6 +55,13 @@ p {
     display: none !important;
 }
 
+.heig{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+ }
+
 .blocc{
     display: block !important;
 }
