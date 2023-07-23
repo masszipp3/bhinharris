@@ -18,11 +18,12 @@ from django.http import HttpRequest
 from django.db.models import Count
 import re
 from django.urls import reverse
-from . decorator import checkmobile
+from . decorator import checkmobile,customer_required
 
 
 
 # Create your views here.
+@customer_required
 @checkmobile
 @login_required(login_url='/login')
 def index(request):
@@ -54,6 +55,8 @@ def index(request):
     else:
         return redirect('customer:pchome')
 
+# @checkmobile
+@customer_required
 @login_required(login_url='/login')
 def customerhomepc(request):
     supermarkets=Supermarket.objects.values('id', 'slug', 'name','address')
@@ -85,6 +88,7 @@ def is_ajax(request):
 
 
 @login_required(login_url='/login')
+@customer_required
 def products(request):
     web=''
     user_Agent= request.META.get('HTTP_USER_AGENT', '')
@@ -178,6 +182,7 @@ def products(request):
         
         return render( request,'customer/products.html',{'porducts':productpage,'catagory':catagory,'quantity':quantities,'total':round(total,2),'count':count,'web':web})
 
+@customer_required
 @login_required(login_url='/login')
 def product_detail(request,slug):
     request.session['discount']=0
@@ -188,6 +193,8 @@ def product_detail(request,slug):
         carts={'quantity':0} 
     return render( request,'customer/product_details.html',{'product_data':product,'quandity':carts})
 
+
+@customer_required
 @login_required(login_url='/login')
 def cart(request):
     request.session['discount']=0
@@ -282,6 +289,7 @@ def cart(request):
                                                  'timeslot':time_slot_choices,'delivery':deliveryoptions,'available':available_time_slots,'discount':round(discountedprice,2)})
 
 @login_required(login_url='/login')
+@customer_required
 def applycoupon(request):
     total=0
     if request.method=='POST':
@@ -300,6 +308,7 @@ def applycoupon(request):
     
 
 @login_required(login_url='/login')
+@customer_required
 def addcart(request):
     msgfrom=request.POST.get('from',False)
     actualtotal=0
@@ -434,6 +443,7 @@ def customerlogin(request):
                     login(request, user)
                     customer=Customer.objects.get(user=request.user)
                     request.session['customer']=customer.id
+                    
                     return redirect('customer:selectsm') 
                 else:   
                     HttpResponse('error`')
@@ -478,6 +488,7 @@ def ordercancel(request,oid):
     return redirect('customer:orders')
 
 @login_required(login_url='/login')
+@customer_required
 def orderdetails(request,oid):
     total=0
     order=Order.objects.get(OrderId=oid)
@@ -489,6 +500,7 @@ def orderdetails(request,oid):
     return render( request,'customer/orderdetails.html',{'order':order,'grandtotal':order.total_price,'orderdetails':orderitems,'discount':round(float(discount),2),'total':round(total,2),'discountedprice':round(float(total-discount),2),'count':orderitems.count()})
 
 @login_required(login_url='/login')
+@customer_required
 def customerorders(request):
     order=Order.objects.filter(user_id=request.session['customer']).order_by('-created_at')
     orderdetails=OrderItem.objects.filter(order__in=order)

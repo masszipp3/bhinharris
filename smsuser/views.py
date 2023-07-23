@@ -15,8 +15,10 @@ from django.core import serializers
 from django.utils import timezone
 from django.utils.timezone import now
 from datetime import date
+from . decorators import adminlog_required
 
 # Create your views here.
+@adminlog_required
 @login_required(login_url='/smsuser/login')
 def index(request):
     try:
@@ -92,6 +94,7 @@ def index(request):
     
     return render(request,'smsuser/index.html',{'ordercount':Orders,'todaysale':round(todaysale,2),'monthsale':round(monthsale,2),'monthcount':monthlycount,'orders':page_obj,'supermarketdetails':supermrk})
 
+@adminlog_required
 @login_required(login_url='/smsuser/login')
 def productlist(request):
     if request.method=='POST':
@@ -114,6 +117,7 @@ def productlist(request):
     return render(request,'smsuser/productlist.html',{'productpage':page_obj,'supermarketdetails':supermrk})
 
 @login_required(login_url='/smsuser/login')
+@adminlog_required
 def addproduct(request):
     msg=''
     supermrk=Supermarket.objects.get(user=request.user)
@@ -148,6 +152,7 @@ def addproduct(request):
     supermrk=Supermarket.objects.get(user=request.user)
     return render(request,'smsuser/addproduct.html',{'cat':catagory,'supermarketdetails':supermrk})
 
+@adminlog_required
 @login_required(login_url='/smsuser/login')
 def categories(request):
    msg = request.GET.get('msg', '')
@@ -160,6 +165,7 @@ def categories(request):
    return render(request,'smsuser/categories.html',{'catagories': page_obj,'supermarketdetails':supermrk})
 
 @login_required(login_url='/smsuser/login')
+@adminlog_required
 def addcategories(request):
     try:
         msg=''
@@ -186,6 +192,7 @@ def addcategories(request):
     return render(request,'smsuser/addcategory.html',{'supermarketdetails':supermrk})
 
 @login_required(login_url='/smsuser/login')
+@adminlog_required
 def productdetails(request,pid):
     product=Product.objects.get(id=pid)
     supermrk=Supermarket.objects.get(user=request.user)
@@ -193,6 +200,7 @@ def productdetails(request,pid):
     
 
 @login_required(login_url='/smsuser/login')
+@adminlog_required
 def updateproduct(request,pid):
     try:
         catagory=Categories.objects.filter()
@@ -218,6 +226,7 @@ def updateproduct(request,pid):
     return render(request,'smsuser/productedit.html',{'product':product,'catagory':catagory,'supermarketdetails':supermrk})
 
 @login_required(login_url='/smsuser/login')
+@adminlog_required
 def updatecategory(request,cid):
     try:
         catagory=Categories.objects.get(id=cid)
@@ -241,12 +250,14 @@ def updatecategory(request,cid):
     return render(request,'smsuser/editcategory.html',{'catdata':catagory,'supermarketdetails':supermrk})
 
 @login_required(login_url='/smsuser/login')
+@adminlog_required
 def coupon(request):
     supermrk=Supermarket.objects.get(user=request.user)
     coupn=Coupon.objects.filter(supermarket__user=request.user)
     return render(request,'smsuser/coupons.html',{'coupons':coupn,'supermarketdetails':supermrk})
 
 @login_required(login_url='/smsuser/login')
+# @adminlog_required
 def delete(request,cid):
     try:
         catagory=Categories.objects.get(id=cid)
@@ -345,6 +356,7 @@ def updatecoupon(request,cid):
     return render(request,'smsuser/updatecoupon.html',{'coupon':coupon,'date':formatted_date,'supermarketdetails':supermrk})
 
 @login_required(login_url='/smsuser/login')
+@adminlog_required
 def orders(request):
     if request.method=='POST':
         keyword=request.POST['keyword']
@@ -362,6 +374,7 @@ def orders(request):
     supermrk=Supermarket.objects.get(user=request.user)
     return render(request,'smsuser/orders.html',{'orders':page_obj,'supermarketdetails':supermrk})
 
+@adminlog_required
 @login_required(login_url='/smsuser/login')
 def orderdetails(request,oid):
     total=0
@@ -391,6 +404,7 @@ def orderreject(request,oid):
 
 
 @login_required(login_url='/smsuser/login')
+@adminlog_required
 def addbanner(request):
     if request.method=='POST':
         if request.FILES.get('top') or request.POST.get('brandtop'):
@@ -471,6 +485,7 @@ def logins(request):
     return render(request,'smsuser/login.html',{'status':msg})
 
 @login_required(login_url='/smsuser/login')
+@adminlog_required
 def smlogout(request):
    logout(request)  
    return redirect('smsuser:login')
