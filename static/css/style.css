@@ -55,13 +55,6 @@ p {
     display: none !important;
 }
 
-.heig{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 999;
- }
-
 .blocc{
     display: block !important;
 }
@@ -98,6 +91,13 @@ p {
     color: var(--green) !important;
     background: #f1fff3 !important;
 }
+.heig{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+ }
+ 
 .btn-sm {
     padding: 6px 19px;
 }

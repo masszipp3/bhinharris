@@ -235,7 +235,7 @@ $(document).ready(function () {
         prominus = $('#minuspro').data('url')
         for (i = 0; i < data.length; i++) {
           console.log('next', nextpage)
-          if (nextpage == true) {
+         
             console.log(typeof(quantities))
             if(quantities.length!=0){
               var product = data[i];
@@ -327,17 +327,19 @@ $(document).ready(function () {
               
               counter++
             }
-            page++;
-            $('#loader').hide()
+           
 
             var productCountDiv = $('#productsdiv').find('.productcountdiv').last();
             updateProductCountDiv(productCountDiv);
 
 
-          }
+          
 
         }
+        page=page+1;
+        $('#loader').hide()
         nextpage=response.has_next_page
+        console.log(nextpage)
 
 
 
@@ -360,7 +362,7 @@ $(document).ready(function () {
     var scrollHeight = scrollContainer.prop('scrollHeight');
     var scrollTop = scrollContainer.scrollTop();
     var containerHeight = scrollContainer.height()+100
-    console.log('containerHeight',containerHeight,'scrollTop',scrollTop,'scrollHeight',scrollHeight)
+    // console.log('containerHeight',containerHeight,'scrollTop',scrollTop,'scrollHeight',scrollHeight)
     return scrollTop + containerHeight >= scrollHeight;
 
   }
@@ -371,10 +373,16 @@ $(document).ready(function () {
     
 
     if (isScrollAtBottom()) {
+      console.log('page',page)
       if(nextpage==true){
+        console.log('dd')
+        nextpage=false
         $('#loader').show()
 
-        loadNextPage();
+        setTimeout(loadNextPage,1000)
+        // loadNextPage();
+        
+        
         
 
       }
