@@ -13,48 +13,59 @@
     <link rel="stylesheet" href="{% static 'vender/sidebar/demo.css' %}">
     <!-- Custom Css -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/customcss.css' %}">
 
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <link href="https://db.onlinewebfonts.com/c/98a34676ba814c4848424f733521ea58?family=Basis+Grotesque+Pro+Bold"
+    rel="stylesheet">
+ <link href="https://db.onlinewebfonts.com/c/3ddd0e3d1a076e112b27d8d9b7e20200?family=Basis+Grotesque+Pro"
+    rel="stylesheet">
 </head>
 <body>
     
-    <div class="offcanvas-header bg-transparent p-0">
-  
-        <div class="ratio ratio-4x3 postion-relative z-n1">
-            <img src="{% static 'images/bhthome.jpeg' %}" class="border-0 w-100" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
+    <div class="border-0 h-100">
+    <div class="offcanvas-header p-0" style="background-color: aliceblue;">
+
+       <div class="login" style="height: 150px; width: 100%;">
+          <a href="#" class=" shadow-sm icon-sm mt-2 mb-3 position-absolute z-0 top-0" data-bs-dismiss="offcanvas"
+             aria-label="Close">
+             <i class="bi bi-arrow-left fs-5" style="color: black;"></i>
+          </a>
+          <h4 class="login-text">Login</h4>
+          <p class="small-text">Enter Your phone number to continue</p> <img class="imgglass" width="73px"
+             height="120px" src="{% static 'images/6661470a-6798-4ced-be98-4d9213066789-removebg-preview.png' %}" alt="">
+       </div>
     </div>
     <div class="offcanvas-body p-0">
-        <div class="d-flex align-items-center bg-light p-3 gap-3 py-3 border-top border-bottom">
-            <i class="icofont-email icofont-2x text-primary"></i>
-            <div class="text-truncate">
-                <h6 class="mb-0">Register/Login <span class="fw-bold"></span></h6>
-                <!-- <p class="text-muted text-truncate m-0">Aqwad, Salalah</p> -->
-            </div>
-            <div class="ms-auto">
-               
-            </div>
-        </div>
-        <form class="p-3" method="post">
-           {% csrf_token %}
-            <div class="mb-3">
-                <input type="email" name="email" class="form-control bg-transparent border-0 rounded-0 border-bottom py-2 px-0 mt-5 mb-5"
-                    placeholder="Enter Your Email">
-            </div>
-           
-            
-           
-        
+       <!-- <div class="d-flex align-items-center bg-light p-3 gap-3 py-3 border-top border-bottom">
+          <i class="icofont-map-pins icofont-2x text-primary"></i>
+          <div class="text-truncate">
+             <h6 class="mb-0">Delivery to <span class="fw-bold">HOME</span></h6>
+             <p class="text-muted text-truncate m-0">H.No. 2834 Street, 784 Sector, Ludhiana, Punjab</p>
+          </div>
+          <div class="ms-auto">
+             <a href="#" class="btn btn-light btn-sm bg-white border text-primary fw-bold text-uppercase">Change</a>
+          </div>
+       </div> -->
+       <form class="p-3" method="post" onsubmit="validateLogin(event)">
+         {% csrf_token %}
+          <div class="mb-3 mt-3 position-relative">
+             <input type="text" name="email" id="myInput" maxlength="15" class="form-control bg-transparent custom-border-bottom py-2 px-0"
+                placeholder="PHONE NUMBER" oninput="updatePhoneNumber(this)">
+             <label class="control-label mb-2" for="">PHONE NUMBER</label>
 
+          </div>
 
+          <button type="submit" class="btncontinue text-uppercase w-100 btn-lg fw-bold">CONTINUE</button>
+       </form>
+       <p class="text-smalls">By clicking, I accept the <span class="bold" style="font-weight: 600;"> Terms & Condtitions </span>& <span class="bold" style="font-weight: 600;">Privacy Policy</span></p>
+       <p class="text-danger text-center" id="error"></p>
     </div>
-    
-    <div class="offcanvas-footer">
-        <button type="submit" class="btn btn-success text-uppercase w-100 btn-lg fw-bold"
-            >Save & proceed</button>
-    </div>
-</form>
+    <!-- <div class="offcanvas-footer">
+       <a href="#" class="btn btn-success text-uppercase w-100 btn-lg fw-bold" data-bs-dismiss="offcanvas"
+          aria-label="Close">Save & proceed</a>
+    </div> -->
+ </div>
 
     <!-- Bootstrap Bundle Js -->
     <script src="{% static 'vender/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -64,6 +75,8 @@
     <script src="{% static 'vender/sidebar/hc-offcanvas-nav.js' %}"></script>
     <!-- Custom Js -->
     <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/brjs.js' %}"></script>
+
     <script src="{% static 'js/myjs.js' %}"></script>
 </body>
 </html>

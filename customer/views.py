@@ -23,8 +23,8 @@ from . decorator import checkmobile,customer_required
 
 
 # Create your views here.
-@customer_required
 @checkmobile
+@customer_required
 @login_required(login_url='/login')
 def index(request):
     user_Agent= request.META.get('HTTP_USER_AGENT', '')

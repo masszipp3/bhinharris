@@ -1,0 +1,110 @@
+.login {
+    background-color: aliceblue;
+    position: relative;
+
+
+ }
+
+ .login-text {
+    position: absolute;
+    bottom: 30px;
+    margin: 3%;
+    font-family: Basis Grotesque Pro Bold;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 1.5;
+    letter-spacing: -0.4px;
+
+ }
+
+ .small-text {
+    position: absolute;
+    bottom: 5px;
+    font-family: Basis Grotesque Pro;
+    /* text-align: center; */
+    font-weight: 100;
+    line-height: 1.5;
+    color: rgb(95, 94, 94);
+    opacity: 0.85;
+    padding-left: 3%;
+ }
+
+ .imgglass {
+    position: absolute;
+    right: 25px;
+    bottom: 0;
+    opacity: 0.7;
+
+ }
+
+ .form-control {
+    color: black;
+ }
+
+ .control-label {
+    position: absolute;
+    display: block;
+    top: 0;
+    transition: 0.2s;
+    color: rgb(95, 94, 94);
+ }
+
+ .form-control::placeholder {
+    font-size: 12px;
+ }
+
+ .form-control:focus {
+    /* font-size: 12px; */
+    border-bottom: .5px solid rgba(0, 0, 0, 0.301);
+ }
+
+ .form-control:focus::placeholder {
+    color: transparent;
+
+ }
+
+ .form-control:placeholder-shown+.control-label {
+    visibility: hidden;
+    z-index: -1;
+    transition: 0.2s ease-in-out;
+ }
+
+ .form-control:not(:placeholder-shown)+.control-label,
+ .form-control:focus:not(:placeholder-shown)+.control-label {
+    visibility: visible;
+    z-index: 1;
+    opacity: 1;
+    transform: translateY(-10px);
+    transition: 0.2s ease-in-out transform;
+ }
+
+ .custom-border-bottom {
+    border: none;
+    border-bottom: .5px solid rgba(0, 0, 0, 0.301);
+    /* Set the border width and color as needed */
+    border-radius: 0;
+    /* Optional: Remove the default border-radius */
+ }
+ .btncontinue{
+    background-color:  rgba(253, 146, 6, 0.964);
+    border-radius: 0;
+    color: white;
+    line-height: 1.5;
+    letter-spacing: -0.4px;
+    font-family: Basis Grotesque Pro Bold;
+    margin-top:3% ;
+    border: 0;
+
+    
+ }
+ .text-smalls{
+font-family: Basis Grotesque Pro;
+/* text-align: center; */
+margin-left: 5%;
+font-weight: 100;
+line-height: 1.5;
+color: rgb(95, 94, 94);
+opacity: 0.85;
+
+}
